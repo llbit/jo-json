@@ -6,10 +6,12 @@
 	<!-- jastadd taskdef -->
 	<taskdef name="jastadd"
 		classname="jastadd.JastAddTask"
-		classpath="${tools.dir}/jastadd2.jar"/>
+		classpath="${tools.dir}/jastadd2.jar" />
 
 	<target name="clean">
-		<delete dir="${gen.dir}"/>
+		<delete>
+			<fileset dir="${gen.dir}" includes="**/*.java" />
+		</delete>
 	</target>
 
 	<target name="gen" description="generate source files">
@@ -20,10 +22,10 @@
 			rewrite="false"
 			novisitcheck="false"
 			debug="false">
-			<fileset dir="${basedir}">
-				<include name="*.ast"/>
-				<include name="*.jrag"/>
-				<include name="*.jadd"/>
+			<fileset dir="${basedir}/jastadd">
+				<include name="*.ast" />
+				<include name="*.jrag" />
+				<include name="*.jadd" />
 			</fileset>
 		</jastadd>
 	</target>
