@@ -1,0 +1,19 @@
+abstract JsonValue;
+
+abstract JsonLiteral;
+
+JsonFalse : JsonLiteral;
+
+JsonTrue : JsonLiteral;
+
+JsonNull : JsonLiteral;
+
+JsonObject : JsonValue ::= JsonMember;
+
+JsonArray : JsonValue ::= Value:JsonMember*;
+
+JsonNumber : JsonValue ::= <Value:Integer>;
+
+JsonString : JsonValue ::= <Value>;
+
+JsonMember ::= <Name> Value:JsonValue;

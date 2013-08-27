@@ -1,0 +1,30 @@
+<project name="Json" default="gen">
+
+	<property name="gen.dir" location="${basedir}/gen" />
+	<property name="tools.dir" location="${basedir}/tools" />
+
+	<!-- jastadd taskdef -->
+	<taskdef name="jastadd"
+		classname="jastadd.JastAddTask"
+		classpath="${tools.dir}/jastadd2.jar"/>
+
+	<target name="clean">
+		<delete dir="${gen.dir}"/>
+	</target>
+
+	<target name="gen" description="generate source files">
+		<mkdir dir="${gen.dir}"/>
+		<jastadd
+			outdir="${gen.dir}"
+			package="se.llbit.json"
+			rewrite="false"
+			novisitcheck="false"
+			debug="false">
+			<fileset dir="${basedir}">
+				<include name="*.ast"/>
+				<include name="*.jrag"/>
+				<include name="*.jadd"/>
+			</fileset>
+		</jastadd>
+	</target>
+</project>
