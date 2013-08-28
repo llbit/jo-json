@@ -12,7 +12,7 @@ JsonNull : JsonLiteral;
 
 JsonObject : JsonValue ::= Member:JsonMember*;
 
-JsonArray : JsonValue ::= Value:JsonValue*;
+JsonArray : JsonValue ::= Element:JsonValue*;
 
 JsonNumber : JsonValue ::= <Value>;
 

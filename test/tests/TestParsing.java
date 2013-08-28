@@ -43,12 +43,8 @@ public class TestParsing {
 		JsonObject object = (JsonObject) parser.parse();
 		assertEquals(1, object.getNumMember());
 		assertTrue(object.getMember(0) instanceof JsonMember);
-		assertTrue(object.getMember(0).getValue() instanceof JsonArray);
-		JsonArray array = (JsonArray) object.getMember(0).getValue();
-		assertEquals(3, array.getNumValue());
-		assertTrue(array.getValue(0) instanceof JsonNumber);
-		assertTrue(array.getValue(1) instanceof JsonNumber);
-		assertTrue(array.getValue(2) instanceof JsonNumber);
+		testArray(object.getMember(0).getValue(), JsonNumber.class,
+			JsonNumber.class, JsonNumber.class);
 	}
 
 	@Test
@@ -64,9 +60,7 @@ public class TestParsing {
 		String json = "[ false ]";
 		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
 		JsonParser parser = new JsonParser(in);
-		JsonArray array = (JsonArray) parser.parse();
-		assertEquals(1, array.getNumValue());
-		assertTrue(array.getValue(0) instanceof JsonFalse);
+		testArray(parser.parse(), JsonFalse.class);
 	}
 
 	@Test
@@ -74,9 +68,7 @@ public class TestParsing {
 		String json = "[ 12 ]";
 		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
 		JsonParser parser = new JsonParser(in);
-		JsonArray array = (JsonArray) parser.parse();
-		assertEquals(1, array.getNumValue());
-		assertTrue(array.getValue(0) instanceof JsonNumber);
+		testArray(parser.parse(), JsonNumber.class);
 	}
 
 	@Test
@@ -84,10 +76,7 @@ public class TestParsing {
 		String json = "[ 12, -3 ]";
 		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
 		JsonParser parser = new JsonParser(in);
-		JsonArray array = (JsonArray) parser.parse();
-		assertEquals(2, array.getNumValue());
-		assertTrue(array.getValue(0) instanceof JsonNumber);
-		assertTrue(array.getValue(1) instanceof JsonNumber);
+		testArray(parser.parse(), JsonNumber.class, JsonNumber.class);
 	}
 
 	@Test
@@ -95,13 +84,8 @@ public class TestParsing {
 		String json = "[ true, 1000, \"a\", null, -3 ]";
 		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
 		JsonParser parser = new JsonParser(in);
-		JsonArray array = (JsonArray) parser.parse();
-		assertEquals(5, array.getNumValue());
-		assertTrue(array.getValue(0) instanceof JsonTrue);
-		assertTrue(array.getValue(1) instanceof JsonNumber);
-		assertTrue(array.getValue(2) instanceof JsonString);
-		assertTrue(array.getValue(3) instanceof JsonNull);
-		assertTrue(array.getValue(4) instanceof JsonNumber);
+		testArray(parser.parse(), JsonTrue.class, JsonNumber.class,
+			JsonString.class, JsonNull.class, JsonNumber.class);
 	}
 
 	@Test
@@ -110,8 +94,8 @@ public class TestParsing {
 		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
 		JsonParser parser = new JsonParser(in);
 		JsonArray array = (JsonArray) parser.parse();
-		assertTrue(array.getValue(0) instanceof JsonString);
-		JsonString value = (JsonString) array.getValue(0);
+		assertTrue(array.getElement(0) instanceof JsonString);
+		JsonString value = (JsonString) array.getElement(0);
 		assertEquals("hello", value.getValue());
 	}
 
@@ -121,8 +105,8 @@ public class TestParsing {
 		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
 		JsonParser parser = new JsonParser(in);
 		JsonArray array = (JsonArray) parser.parse();
-		assertTrue(array.getValue(0) instanceof JsonNumber);
-		JsonNumber value = (JsonNumber) array.getValue(0);
+		assertTrue(array.getElement(0) instanceof JsonNumber);
+		JsonNumber value = (JsonNumber) array.getElement(0);
 		assertEquals("0", value.getValue());
 	}
 
@@ -132,8 +116,8 @@ public class TestParsing {
 		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
 		JsonParser parser = new JsonParser(in);
 		JsonArray array = (JsonArray) parser.parse();
-		assertTrue(array.getValue(0) instanceof JsonNumber);
-		JsonNumber value = (JsonNumber) array.getValue(0);
+		assertTrue(array.getElement(0) instanceof JsonNumber);
+		JsonNumber value = (JsonNumber) array.getElement(0);
 		assertEquals("-13", value.getValue());
 	}
 
@@ -143,7 +127,7 @@ public class TestParsing {
 		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
 		JsonParser parser = new JsonParser(in);
 		JsonArray array = (JsonArray) parser.parse();
-		assertTrue(array.getValue(0) instanceof JsonTrue);
+		assertTrue(array.getElement(0) instanceof JsonTrue);
 	}
 
 	@Test
@@ -152,7 +136,7 @@ public class TestParsing {
 		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
 		JsonParser parser = new JsonParser(in);
 		JsonArray array = (JsonArray) parser.parse();
-		assertTrue(array.getValue(0) instanceof JsonFalse);
+		assertTrue(array.getElement(0) instanceof JsonFalse);
 	}
 
 	@Test
@@ -161,7 +145,7 @@ public class TestParsing {
 		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
 		JsonParser parser = new JsonParser(in);
 		JsonArray array = (JsonArray) parser.parse();
-		assertTrue(array.getValue(0) instanceof JsonNull);
+		assertTrue(array.getElement(0) instanceof JsonNull);
 	}
 
 	@Test
@@ -200,6 +184,15 @@ public class TestParsing {
 			fail("expected syntax error!");
 		} catch (SyntaxError e) {
 			assertEquals("Syntax Error: missing element in array", e.getMessage());
+		}
+	}
+
+	private static void testArray(JsonValue value, Class<?>... elementTypes) {
+		assertTrue(value instanceof JsonArray);
+		JsonArray array = (JsonArray) value;
+		assertEquals(elementTypes.length, array.getNumElement());
+		for (int i = 0; i < elementTypes.length; ++i) {
+			assertEquals(elementTypes[i], array.getElement(i).getClass());
 		}
 	}
 

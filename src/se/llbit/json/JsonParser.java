@@ -43,7 +43,7 @@ public class JsonParser {
 				}
 				break;
 			}
-			array.addValue(value);
+			array.addElement(value);
 			skipWhitespace();
 			if (in.peek(0) == ',') {
 				first = false;
