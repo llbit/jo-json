@@ -11,7 +11,7 @@
  *     * Neither the name of the <organization> nor the
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -35,19 +35,19 @@ public class LookaheadReader extends FilterReader {
 	 * Maximum read buffer size
 	 */
 	private static final int BUFF_SIZE = 1024;
-	
+
 	/**
 	 * The lookahead
 	 */
 	private final int lookahead;
-	
-	private char[] buffer = new char[BUFF_SIZE];
-	
+
+	private final char[] buffer = new char[BUFF_SIZE];
+
 	/**
 	 * Current position in the read buffer
 	 */
 	private int pos = 0;
-	
+
 	/**
 	 * Number of valid characters in the read buffer
 	 */
@@ -83,12 +83,18 @@ public class LookaheadReader extends FilterReader {
 		pos += num;
 	}
 
+	@Override
+	public long skip(long num) throws IOException {
+		consume((int) num);
+		return num;
+	}
+
 	/**
 	 * Look ahead in the input stream.
 	 * @param index Number of characters to look ahead
 	 * @return The character at the given position, or -1 if the given
 	 * position is outside the read buffer
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public int peek(int index) throws IOException {
 		refill();
@@ -101,7 +107,7 @@ public class LookaheadReader extends FilterReader {
 	/**
 	 * Pop next character in the stream.
 	 * @return The next character, or -1 if the end has been reached
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public int pop() throws IOException {
 		refill();
