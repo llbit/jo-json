@@ -5,9 +5,20 @@ import java.io.InputStream;
 
 import se.llbit.io.LookaheadReader;
 
+/**
+ * Parses JSON
+ * @author Jesper Öqvist <jesper.oqvist@cs.lth.se>
+ */
 public class JsonParser {
 
+	/**
+	 * @author Jesper Öqvist <jesper.oqvist@cs.lth.se>
+	 */
+	@SuppressWarnings("serial")
 	public static class SyntaxError extends Exception {
+		/**
+		 * @param message
+		 */
 		public SyntaxError(String message) {
 			super("Syntax Error: " + message);
 		}
@@ -15,10 +26,19 @@ public class JsonParser {
 
 	private final LookaheadReader in;
 
+	/**
+	 * @param input
+	 */
 	public JsonParser(InputStream input) {
 		in = new LookaheadReader(input, 8);
 	}
 
+	/**
+	 * Parses a JSON object or array.
+	 * @return JsonObject or JsonArray, not null
+	 * @throws IOException
+	 * @throws SyntaxError
+	 */
 	public JsonValue parse() throws IOException, SyntaxError {
 		skipWhitespace();
 		if (isObjectStart()) {
@@ -75,6 +95,7 @@ public class JsonParser {
 			in.skip(4);
 			return new JsonNull();
 		} else {
+			// TODO use Null Object pattern
 			return null; // not a JSON value
 		}
 	}
