@@ -38,14 +38,10 @@ public class JsonParser {
 			skipWhitespace();
 			JsonValue value = parseValue();
 			if (value == null) {
-				if (first) {
-					if (in.peek(0) == ',') {
-						throw new SyntaxError("missing element in array");
-					}
-					break;
-				} else {
+				if (!first || in.peek(0) == ',') {
 					throw new SyntaxError("missing element in array");
 				}
+				break;
 			}
 			array.addValue(value);
 			skipWhitespace();
@@ -145,12 +141,17 @@ public class JsonParser {
 			int peek = in.peek(0);
 			if (peek == -1) {
 				throw new SyntaxError("EOF while parsing JSON number");
-			} else if (isWhitespace(peek)) {
-				return new JsonNumber(sb.toString());
+			} else if (isDigit(peek)) {
+				sb.append((char) in.pop());
 			} else {
-				sb.append(in.pop());
+				return new JsonNumber(sb.toString());
 			}
 		}
+	}
+
+	private boolean isDigit(int chr) {
+		return (chr >= '0' && chr <= '9') || chr == '.' || chr == 'e' ||
+			chr == 'E' || chr == '-' || chr == '+';
 	}
 
 	private void skipWhitespace() throws IOException {
@@ -197,16 +198,24 @@ public class JsonParser {
 	private JsonObject parseObject() throws IOException, SyntaxError {
 		skipChar('{');
 		JsonObject object = new JsonObject();
+		boolean first = true;
 		while (true) {
 			skipWhitespace();
 			JsonMember member = parseMember();
 			if (member == null) {
+				if (!first || in.peek(0) == ',') {
+					throw new SyntaxError("missing member in object");
+				}
 				break;
 			}
-			skipWhitespace();
-			skipChar(',');
-			// TODO require next value
 			object.addMember(member);
+			skipWhitespace();
+			if (in.peek(0) == ',') {
+				first = false;
+				skipChar(',');
+			} else {
+				break;
+			}
 		}
 		skipChar('}');
 		return object;
@@ -223,9 +232,20 @@ public class JsonParser {
 		}
 	}
 
-	private JsonMember parseMember() {
-		// TODO Auto-generated method stub
-		return null;
+	private JsonMember parseMember() throws IOException, SyntaxError {
+		if (isString()) {
+			JsonString name = parseString();
+			skipWhitespace();
+			skipChar(':');
+			skipWhitespace();
+			JsonValue value = parseValue();
+			if (value == null) {
+				throw new SyntaxError("missing value for object member");
+			}
+			return new JsonMember(name.getValue(), value);
+		} else {
+			return null;
+		}
 	}
 
 	private boolean isObjectStart() throws IOException {

@@ -6,11 +6,8 @@ import java.io.IOException;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import se.llbit.json.JsonArray;
-import se.llbit.json.JsonObject;
-import se.llbit.json.JsonParser;
+import se.llbit.json.*;
 import se.llbit.json.JsonParser.SyntaxError;
-import se.llbit.json.JsonString;
 
 /**
  * Simple JSON parsing tests
@@ -28,6 +25,33 @@ public class TestParsing {
 	}
 
 	@Test
+	public void testOneMemberObject_1() throws IOException, SyntaxError {
+		String json = " { \"a\": 0 } ";
+		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
+		JsonParser parser = new JsonParser(in);
+		JsonObject object = (JsonObject) parser.parse();
+		assertEquals(1, object.getNumMember());
+		assertTrue(object.getMember(0) instanceof JsonMember);
+		assertTrue(object.getMember(0).getValue() instanceof JsonNumber);
+	}
+
+	@Test
+	public void testNestedObjectArray_1() throws IOException, SyntaxError {
+		String json = " { \"a\": [ 0, 1, 2 ] } ";
+		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
+		JsonParser parser = new JsonParser(in);
+		JsonObject object = (JsonObject) parser.parse();
+		assertEquals(1, object.getNumMember());
+		assertTrue(object.getMember(0) instanceof JsonMember);
+		assertTrue(object.getMember(0).getValue() instanceof JsonArray);
+		JsonArray array = (JsonArray) object.getMember(0).getValue();
+		assertEquals(3, array.getNumValue());
+		assertTrue(array.getValue(0) instanceof JsonNumber);
+		assertTrue(array.getValue(1) instanceof JsonNumber);
+		assertTrue(array.getValue(2) instanceof JsonNumber);
+	}
+
+	@Test
 	public void testEmptyArray() throws IOException, SyntaxError {
 		String json = "[]";
 		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
@@ -40,7 +64,9 @@ public class TestParsing {
 		String json = "[ false ]";
 		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
 		JsonParser parser = new JsonParser(in);
-		assertTrue(parser.parse() instanceof JsonArray);
+		JsonArray array = (JsonArray) parser.parse();
+		assertEquals(1, array.getNumValue());
+		assertTrue(array.getValue(0) instanceof JsonFalse);
 	}
 
 	@Test
@@ -48,17 +74,94 @@ public class TestParsing {
 		String json = "[ 12 ]";
 		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
 		JsonParser parser = new JsonParser(in);
-		assertTrue(parser.parse() instanceof JsonArray);
+		JsonArray array = (JsonArray) parser.parse();
+		assertEquals(1, array.getNumValue());
+		assertTrue(array.getValue(0) instanceof JsonNumber);
 	}
 
 	@Test
-	public void testStringLiteral_1() throws IOException, SyntaxError {
+	public void testMultiElementArray_1() throws IOException, SyntaxError {
+		String json = "[ 12, -3 ]";
+		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
+		JsonParser parser = new JsonParser(in);
+		JsonArray array = (JsonArray) parser.parse();
+		assertEquals(2, array.getNumValue());
+		assertTrue(array.getValue(0) instanceof JsonNumber);
+		assertTrue(array.getValue(1) instanceof JsonNumber);
+	}
+
+	@Test
+	public void testMultiElementArray_2() throws IOException, SyntaxError {
+		String json = "[ true, 1000, \"a\", null, -3 ]";
+		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
+		JsonParser parser = new JsonParser(in);
+		JsonArray array = (JsonArray) parser.parse();
+		assertEquals(5, array.getNumValue());
+		assertTrue(array.getValue(0) instanceof JsonTrue);
+		assertTrue(array.getValue(1) instanceof JsonNumber);
+		assertTrue(array.getValue(2) instanceof JsonString);
+		assertTrue(array.getValue(3) instanceof JsonNull);
+		assertTrue(array.getValue(4) instanceof JsonNumber);
+	}
+
+	@Test
+	public void testString_1() throws IOException, SyntaxError {
 		String json = "[ \"hello\" ]";
 		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
 		JsonParser parser = new JsonParser(in);
 		JsonArray array = (JsonArray) parser.parse();
+		assertTrue(array.getValue(0) instanceof JsonString);
 		JsonString value = (JsonString) array.getValue(0);
 		assertEquals("hello", value.getValue());
+	}
+
+	@Test
+	public void testNumber_1() throws IOException, SyntaxError {
+		String json = "[ 0 ]";
+		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
+		JsonParser parser = new JsonParser(in);
+		JsonArray array = (JsonArray) parser.parse();
+		assertTrue(array.getValue(0) instanceof JsonNumber);
+		JsonNumber value = (JsonNumber) array.getValue(0);
+		assertEquals("0", value.getValue());
+	}
+
+	@Test
+	public void testNumber_2() throws IOException, SyntaxError {
+		String json = "[ -13 ]";
+		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
+		JsonParser parser = new JsonParser(in);
+		JsonArray array = (JsonArray) parser.parse();
+		assertTrue(array.getValue(0) instanceof JsonNumber);
+		JsonNumber value = (JsonNumber) array.getValue(0);
+		assertEquals("-13", value.getValue());
+	}
+
+	@Test
+	public void testTrue() throws IOException, SyntaxError {
+		String json = "[ true ]";
+		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
+		JsonParser parser = new JsonParser(in);
+		JsonArray array = (JsonArray) parser.parse();
+		assertTrue(array.getValue(0) instanceof JsonTrue);
+	}
+
+	@Test
+	public void testFalse() throws IOException, SyntaxError {
+		String json = "[ false ]";
+		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
+		JsonParser parser = new JsonParser(in);
+		JsonArray array = (JsonArray) parser.parse();
+		assertTrue(array.getValue(0) instanceof JsonFalse);
+	}
+
+	@Test
+	public void testNull() throws IOException, SyntaxError {
+		String json = "[ null ]";
+		ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
+		JsonParser parser = new JsonParser(in);
+		JsonArray array = (JsonArray) parser.parse();
+		assertTrue(array.getValue(0) instanceof JsonNull);
 	}
 
 	@Test
