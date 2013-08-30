@@ -48,9 +48,9 @@ public class JsonParser {
 	 */
 	public JsonValue parse() throws IOException, SyntaxError {
 		skipWhitespace();
-		if (in.peek(0) == BEGIN_OBJECT) {
+		if (in.peek() == BEGIN_OBJECT) {
 			return parseObject();
-		} else if (in.peek(0) == BEGIN_ARRAY) {
+		} else if (in.peek() == BEGIN_ARRAY) {
 			return parseArray();
 		} else {
 			throw new SyntaxError("expected object or array!");
@@ -65,14 +65,14 @@ public class JsonParser {
 			skipWhitespace();
 			JsonValue value = parseValue();
 			if (value == null) {
-				if (!first || in.peek(0) == VALUE_SEPARATOR) {
+				if (!first || in.peek() == VALUE_SEPARATOR) {
 					throw new SyntaxError("missing element in array");
 				}
 				break;
 			}
 			array.addElement(value);
 			skipWhitespace();
-			if (in.peek(0) == VALUE_SEPARATOR) {
+			if (in.peek() == VALUE_SEPARATOR) {
 				first = false;
 				skipChar(VALUE_SEPARATOR);
 			} else {
@@ -84,9 +84,9 @@ public class JsonParser {
 	}
 
 	private JsonValue parseValue() throws IOException, SyntaxError {
-		if (in.peek(0) == BEGIN_OBJECT) {
+		if (in.peek() == BEGIN_OBJECT) {
 			return parseObject();
-		} else if (in.peek(0) == BEGIN_ARRAY) {
+		} else if (in.peek() == BEGIN_ARRAY) {
 			return parseArray();
 		} else if (isNumber()) {
 			return parseNumber();
@@ -166,7 +166,7 @@ public class JsonParser {
 	private JsonValue parseNumber() throws IOException, SyntaxError {
 		StringBuilder sb = new StringBuilder();
 		while (true) {
-			int peek = in.peek(0);
+			int peek = in.peek();
 			if (peek == -1) {
 				throw new SyntaxError("EOF while parsing JSON number");
 			} else if (isDigit(peek)) {
@@ -183,7 +183,7 @@ public class JsonParser {
 	}
 
 	private void skipWhitespace() throws IOException {
-		while (isWhitespace(in.peek(0))) {
+		while (isWhitespace(in.peek())) {
 			in.pop();
 		}
 	}
@@ -193,12 +193,12 @@ public class JsonParser {
 	}
 
 	private boolean isNumber() throws IOException {
-		int peek = in.peek(0);
+		int peek = in.peek();
 		return (peek >= '0' && peek <= '9') || peek == '-' || peek == '+';
 	}
 
 	private boolean isString() throws IOException {
-		return in.peek(0) == '"';
+		return in.peek() == '"';
 	}
 
 	private boolean isTrue() throws IOException {
@@ -231,14 +231,14 @@ public class JsonParser {
 			skipWhitespace();
 			JsonMember member = parseMember();
 			if (member == null) {
-				if (!first || in.peek(0) == VALUE_SEPARATOR) {
+				if (!first || in.peek() == VALUE_SEPARATOR) {
 					throw new SyntaxError("missing member in object");
 				}
 				break;
 			}
 			object.addMember(member);
 			skipWhitespace();
-			if (in.peek(0) == VALUE_SEPARATOR) {
+			if (in.peek() == VALUE_SEPARATOR) {
 				first = false;
 				skipChar(VALUE_SEPARATOR);
 			} else {

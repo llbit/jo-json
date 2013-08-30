@@ -90,6 +90,19 @@ public class LookaheadReader extends FilterReader {
 	}
 
 	/**
+	 * @return The next character, or -1 if the next character
+	 * is past the end of the input stream
+	 * @throws IOException
+	 */
+	public int peek() throws IOException {
+		refill();
+		if (pos < length)
+			return buffer[pos];
+		else
+			return -1;
+	}
+
+	/**
 	 * Look ahead in the input stream.
 	 * @param index Number of characters to look ahead
 	 * @return The character at the given position, or -1 if the given
