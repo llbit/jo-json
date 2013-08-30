@@ -131,12 +131,17 @@ public class JsonParser {
 		case QUOTE_MARK:
 		case ESCAPE:
 		case '/':
-		case 'b':
-		case 'f':
-		case 'n':
-		case 'r':
-		case 't':
 			return (char) next;
+		case 'b':
+			return '\b';
+		case 'f':
+			return '\f';
+		case 'n':
+			return '\n';
+		case 'r':
+			return '\r';
+		case 't':
+			return '\t';
 		case 'u':
 			int u1 = hexdigit();
 			int u2 = hexdigit();
