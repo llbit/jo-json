@@ -1,0 +1,12 @@
+JsonString [["$Value"]]
+JsonNumber [[$Value]]
+JsonArray [[[
+  $cat($ElementList, ",\n")
+]]]
+JsonObject [[{
+  $cat($MemberList, ",\n")
+}]]
+JsonMember [["$Name": $Value]]
+JsonFalse [[false]]
+JsonTrue [[true]]
+JsonNull [[null]]

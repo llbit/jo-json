@@ -1,5 +1,7 @@
-<project name="Json" default="gen">
+<project name="Json" default="build">
 
+	<property name="bin.dir" location="${basedir}/ant-bin" />
+	<property name="src.dir" location="${basedir}/src" />
 	<property name="gen.dir" location="${basedir}/gen" />
 	<property name="tools.dir" location="${basedir}/tools" />
 
@@ -16,6 +18,10 @@
 
 	<target name="gen" description="generate source files">
 		<mkdir dir="${gen.dir}"/>
+		<java jar="${tools.dir}/aspectgen.jar" fork="true"
+			output="jastadd/GeneratedAspect.jadd">
+			<arg value="jastadd/PrettyPrint.tt"/>
+		</java>
 		<jastadd
 			outdir="${gen.dir}"
 			package="se.llbit.json">
@@ -25,5 +31,14 @@
 				<include name="*.jadd" />
 			</fileset>
 		</jastadd>
+	</target>
+
+	<target name="build" depends="gen">
+		<mkdir dir="${bin.dir}"/>
+		<javac destdir="${bin.dir}"
+			includeantruntime="false">
+			<src path="${src.dir}"/>
+			<src path="${gen.dir}"/>
+		</javac>
 	</target>
 </project>

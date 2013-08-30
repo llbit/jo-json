@@ -1,2 +1,6 @@
-*.swp
 /bin
+/ant-bin
+/jastadd/GeneratedAspect.jadd
+
+# vim
+*.swp
