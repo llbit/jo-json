@@ -5,23 +5,13 @@ import java.io.InputStream;
 
 import se.llbit.io.LookaheadReader;
 
+import static se.llbit.json.JsonConstants.*;
+
 /**
  * Parses JSON
  * @author Jesper Öqvist <jesper.oqvist@cs.lth.se>
  */
 public class JsonParser {
-
-	private static final char BEGIN_OBJECT = '{';
-	private static final char END_OBJECT = '}';
-	private static final char BEGIN_ARRAY = '[';
-	private static final char END_ARRAY = ']';
-	private static final char NAME_SEPARATOR = ':';
-	private static final char VALUE_SEPARATOR = ',';
-	private static final char[] TRUE = "true".toCharArray();
-	private static final char[] FALSE = "false".toCharArray();
-	private static final char[] NULL = "null".toCharArray();
-	private static final char QUOTE_MARK = '"';
-	private static final char ESCAPE = '\\';
 
 	/**
 	 * @author Jesper Öqvist <jesper.oqvist@cs.lth.se>
