@@ -11,6 +11,13 @@ import se.llbit.io.LookaheadReader;
  */
 public class JsonParser {
 
+	private static final char BEGIN_OBJECT = '{';
+	private static final char END_OBJECT = '}';
+	private static final char BEGIN_ARRAY = '[';
+	private static final char END_ARRAY = ']';
+	private static final char NAME_SEPARATOR = ':';
+	private static final char VALUE_SEPARATOR = ',';
+
 	/**
 	 * @author Jesper Öqvist <jesper.oqvist@cs.lth.se>
 	 */
@@ -41,9 +48,9 @@ public class JsonParser {
 	 */
 	public JsonValue parse() throws IOException, SyntaxError {
 		skipWhitespace();
-		if (isObjectStart()) {
+		if (in.peek(0) == BEGIN_OBJECT) {
 			return parseObject();
-		} else if (isArrayStart()) {
+		} else if (in.peek(0) == BEGIN_ARRAY) {
 			return parseArray();
 		} else {
 			throw new SyntaxError("expected object or array!");
@@ -51,35 +58,35 @@ public class JsonParser {
 	}
 
 	private JsonArray parseArray() throws IOException, SyntaxError {
-		skipChar('[');
+		skipChar(BEGIN_ARRAY);
 		JsonArray array = new JsonArray();
 		boolean first = true;
 		while (true) {
 			skipWhitespace();
 			JsonValue value = parseValue();
 			if (value == null) {
-				if (!first || in.peek(0) == ',') {
+				if (!first || in.peek(0) == VALUE_SEPARATOR) {
 					throw new SyntaxError("missing element in array");
 				}
 				break;
 			}
 			array.addElement(value);
 			skipWhitespace();
-			if (in.peek(0) == ',') {
+			if (in.peek(0) == VALUE_SEPARATOR) {
 				first = false;
-				skipChar(',');
+				skipChar(VALUE_SEPARATOR);
 			} else {
 				break;
 			}
 		}
-		skipChar(']');
+		skipChar(END_ARRAY);
 		return array;
 	}
 
 	private JsonValue parseValue() throws IOException, SyntaxError {
-		if (isObjectStart()) {
+		if (in.peek(0) == BEGIN_OBJECT) {
 			return parseObject();
-		} else if (isArrayStart()) {
+		} else if (in.peek(0) == BEGIN_ARRAY) {
 			return parseArray();
 		} else if (isNumber()) {
 			return parseNumber();
@@ -217,28 +224,28 @@ public class JsonParser {
 	}
 
 	private JsonObject parseObject() throws IOException, SyntaxError {
-		skipChar('{');
+		skipChar(BEGIN_OBJECT);
 		JsonObject object = new JsonObject();
 		boolean first = true;
 		while (true) {
 			skipWhitespace();
 			JsonMember member = parseMember();
 			if (member == null) {
-				if (!first || in.peek(0) == ',') {
+				if (!first || in.peek(0) == VALUE_SEPARATOR) {
 					throw new SyntaxError("missing member in object");
 				}
 				break;
 			}
 			object.addMember(member);
 			skipWhitespace();
-			if (in.peek(0) == ',') {
+			if (in.peek(0) == VALUE_SEPARATOR) {
 				first = false;
-				skipChar(',');
+				skipChar(VALUE_SEPARATOR);
 			} else {
 				break;
 			}
 		}
-		skipChar('}');
+		skipChar(END_OBJECT);
 		return object;
 	}
 
@@ -257,7 +264,7 @@ public class JsonParser {
 		if (isString()) {
 			JsonString name = parseString();
 			skipWhitespace();
-			skipChar(':');
+			skipChar(NAME_SEPARATOR);
 			skipWhitespace();
 			JsonValue value = parseValue();
 			if (value == null) {
@@ -267,13 +274,5 @@ public class JsonParser {
 		} else {
 			return null;
 		}
-	}
-
-	private boolean isObjectStart() throws IOException {
-		return in.peek(0) == '{';
-	}
-
-	private boolean isArrayStart() throws IOException {
-		return in.peek(0) == '[';
 	}
 }
