@@ -1,0 +1,10 @@
+aspect Json {
+	syn JsonValue JsonObject.get(String name) {
+		for (JsonMember member: getMemberList()) {
+			if (member.getName().equals(name)) {
+				return member.getValue();
+			}
+		}
+		return null;
+	}
+}
