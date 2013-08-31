@@ -1,4 +1,9 @@
 aspect Json {
+	/**
+	 * Retrieves the value of a member in this JSON object.
+	 * @param name the name to search for
+	 * @return the JSON member value for the first member with the given name
+	 */
 	syn JsonValue JsonObject.get(String name) {
 		for (JsonMember member: getMemberList()) {
 			if (member.getName().equals(name)) {
@@ -7,4 +12,32 @@ aspect Json {
 		}
 		return null;
 	}
+	
+	/**
+	 * @param undefined value returned if this is not a JSON string.
+	 * @return the JSON string value
+	 */
+	syn String JsonValue.stringValue(String undefined) = undefined;
+	eq JsonString.stringValue(String undefined) = getValue();
+	
+	/**
+	 * @param undefined value returned if this is not a JSON number.
+	 * @return the JSON number value
+	 */
+	syn int JsonValue.intValue(int undefined) = undefined;
+	eq JsonNumber.intValue(int undefined) = Integer.parseInt(getValue());
+
+	/**
+	 * @param undefined value returned if this is not a JSON number.
+	 * @return the JSON number value
+	 */
+	syn float JsonValue.floatValue(float undefined) = undefined;
+	eq JsonNumber.floatValue(float undefined) = Float.parseFloat(getValue());
+
+	/**
+	 * @param undefined value returned if this is not a JSON number.
+	 * @return the JSON number value
+	 */
+	syn double JsonValue.doubleValue(double undefined) = undefined;
+	eq JsonNumber.doubleValue(double undefined) = Double.parseDouble(getValue());
 }
