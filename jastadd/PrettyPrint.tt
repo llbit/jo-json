@@ -1,4 +1,4 @@
-JsonString [["$Value"]]
+JsonString [["#escaped"]]
 JsonNumber [[$Value]]
 JsonArray [[[
   $cat($ElementList, ",\n")
