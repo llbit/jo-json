@@ -55,6 +55,15 @@ public class PrettyPrinter {
 	}
 
 	/**
+	 * @param ind
+	 * @param target
+	 */
+	public PrettyPrinter(String ind, PrintStream target) {
+		this(ind);
+		out = target;
+	}
+
+	/**
 	 * @param target
 	 */
 	public void setTarget(PrintStream target) {

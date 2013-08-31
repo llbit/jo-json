@@ -2,5 +2,7 @@
 /ant-bin
 /jastadd/GeneratedAspect.jadd
 
+/data/*.json.out
+
 # vim
 *.swp
