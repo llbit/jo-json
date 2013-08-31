@@ -152,15 +152,13 @@ public class JsonParser {
 
 	private int hexdigit() throws IOException, SyntaxError {
 		int next = in.pop();
-		if (next >= '0' && next <= '9') {
-			return next - '0';
-		} else if (next >= 'A' && next <= 'F') {
-			return next - 'A' + 0xA;
-		} else if (next >= 'a' && next <= 'f') {
-			return next - 'a' + 0xA;
-		} else {
-			throw new SyntaxError("non-hexadecimal digit in unicode escape sequence");
-		}
+		int v1 = next - '0';
+		int v2 = next - 'A' + 0xA;
+		int v3 = next - 'a' + 0xA;
+		if (v1 >= 0 && v1 <= 9) return v1;
+		if (v2 >= 0xA && v2 <= 0xF) return v2;
+		if (v3 >= 0xA && v3 <= 0xF) return v3;
+		throw new SyntaxError("non-hexadecimal digit in unicode escape sequence");
 	}
 
 	private JsonValue parseNumber() throws IOException, SyntaxError {
