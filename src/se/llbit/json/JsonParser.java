@@ -42,63 +42,71 @@ public class JsonParser {
 	 * @throws SyntaxError
 	 */
 	public JsonValue parse() throws IOException, SyntaxError {
+		JsonValue value;
 		skipWhitespace();
-		if (in.peek() == BEGIN_OBJECT) {
-			return parseObject();
-		} else if (in.peek() == BEGIN_ARRAY) {
-			return parseArray();
-		} else {
-			throw new SyntaxError("expected object or array!");
+		switch(in.peek()) {
+			case BEGIN_OBJECT:
+				value = parseObject();
+				break;
+			case BEGIN_ARRAY:
+				value = parseArray();
+				break;
+			default:
+				throw new SyntaxError("expected object or array");
 		}
+		skipWhitespace();
+		if (in.peek() != -1) {
+			throw new SyntaxError("garbage at end of input");
+		}
+		return value;
 	}
 
 	private JsonArray parseArray() throws IOException, SyntaxError {
-		require(BEGIN_ARRAY);
+		accept(BEGIN_ARRAY);
 		JsonArray array = new JsonArray();
-		while (true) {
+		do {
 			skipWhitespace();
 			JsonValue value = parseValue();
 			if (value == null) {
-				if (array.hasElement() || in.peek() == VALUE_SEPARATOR) {
+				if (array.hasElement() || in.peek() == VALUE_SEPARATOR)
 					throw new SyntaxError("missing element in array");
-				}
 				break;
 			}
 			array.addElement(value);
 			skipWhitespace();
-			if (in.peek() == VALUE_SEPARATOR) {
-				require(VALUE_SEPARATOR);
-			} else {
-				break;
-			}
-		}
-		require(END_ARRAY);
+		} while (skip(VALUE_SEPARATOR));
+		accept(END_ARRAY);
 		return array;
 	}
 
 	private JsonValue parseValue() throws IOException, SyntaxError {
-		if (in.peek() == BEGIN_OBJECT) {
-			return parseObject();
-		} else if (in.peek() == BEGIN_ARRAY) {
-			return parseArray();
-		} else if (isNumber()) {
-			return parseNumber();
-		} else if (isString()) {
-			return parseString();
-		} else if (acceptLiteral(TRUE)) {
-			return new JsonTrue();
-		} else if (acceptLiteral(FALSE)) {
-			return new JsonFalse();
-		} else if (acceptLiteral(NULL)) {
-			return new JsonNull();
-		} else {
-			// TODO use Null Object pattern
-			return null; // not a JSON value
+		switch (in.peek()) {
+			case BEGIN_OBJECT:
+				return parseObject();
+			case BEGIN_ARRAY:
+				return parseArray();
+			case '0': case '1': case '2': case '3': case '4': case '5':
+			case '6': case '7': case '8': case '9': case '-': case '+':
+				return parseNumber();
+			case QUOTE_MARK:
+				return parseString();
+			case 't':
+				acceptLiteral(TRUE);
+				return new JsonTrue();
+			case 'f':
+				acceptLiteral(FALSE);
+				return new JsonFalse();
+			case 'n':
+				acceptLiteral(NULL);
+				return new JsonNull();
+			default:
+				// TODO use Null Object pattern
+				return null; // not a JSON value
 		}
 	}
 
 	private JsonString parseString() throws IOException, SyntaxError {
-		require(QUOTE_MARK);
+		accept(QUOTE_MARK);
 		StringBuilder sb = new StringBuilder();
 		while (true) {
 			int next = in.pop();
@@ -133,13 +141,10 @@ public class JsonParser {
 		case 't':
 			return '\t';
 		case 'u':
-			int u1 = hexdigit();
-			int u2 = hexdigit();
-			int u3 = hexdigit();
-			int u4 = hexdigit();
-			return (char) ((u1 << 12) | (u2 << 8) | (u3 << 4) | u4);
+			int[] u = { hexdigit(), hexdigit(), hexdigit(), hexdigit() };
+			return (char) ((u[0] << 12) | (u[1] << 8) | (u[2] << 4) | u[3]);
 		case -1:
-			throw new SyntaxError("EOF while parsing JSON string");
+			throw new SyntaxError("end of input while parsing JSON string");
 		default:
 			throw new SyntaxError("illegal escape sequence in JSON string");
 		}
@@ -161,99 +166,79 @@ public class JsonParser {
 	private JsonValue parseNumber() throws IOException, SyntaxError {
 		StringBuilder sb = new StringBuilder();
 		while (true) {
-			int peek = in.peek();
-			if (peek == -1) {
-				throw new SyntaxError("EOF while parsing JSON number");
-			} else if (isDigit(peek)) {
-				sb.append((char) in.pop());
-			} else {
-				return new JsonNumber(sb.toString());
+			switch (in.peek()) {
+				case -1:
+					throw new SyntaxError("EOF while parsing JSON number");
+				case '0': case '1': case '2': case '3': case '4': case '5':
+				case '6': case '7': case '8': case '9': case '-': case '+':
+				case '.': case 'e': case 'E':
+					sb.append((char) in.pop());
+					break;
+				default:
+					return new JsonNumber(sb.toString());
 			}
 		}
 	}
 
-	private boolean isDigit(int chr) {
-		return (chr >= '0' && chr <= '9') || chr == '.' || chr == 'e' ||
-			chr == 'E' || chr == '-' || chr == '+';
-	}
-
 	private void skipWhitespace() throws IOException {
-		while (isWhitespace(in.peek())) {
-			in.pop();
-		}
+		while (isWhitespace(in.peek())) in.pop();
 	}
 
 	private boolean isWhitespace(int chr) {
 		return chr == 0x20 || chr == 0x09 || chr == 0x0A || chr == 0x0D;
 	}
 
-	private boolean isNumber() throws IOException {
-		int peek = in.peek();
-		return (peek >= '0' && peek <= '9') || peek == '-' || peek == '+';
-	}
-
-	private boolean isString() throws IOException {
-		return in.peek() == '"';
-	}
-
-	private boolean acceptLiteral(char[] literal) throws IOException {
-		for (int i = 0; i < literal.length; ++i) {
-			if (in.peek(i) != literal[i]) {
-				return false;
-			}
+	private void acceptLiteral(char[] literal) throws IOException, SyntaxError {
+		for (char c: literal) {
+			if (in.pop() != c)
+				throw new SyntaxError("encountered invalid JSON literal");
 		}
-		in.skip(literal.length);
-		return true;
 	}
 
 	private JsonObject parseObject() throws IOException, SyntaxError {
-		require(BEGIN_OBJECT);
+		accept(BEGIN_OBJECT);
 		JsonObject object = new JsonObject();
-		while (true) {
+		do {
 			skipWhitespace();
 			JsonMember member = parseMember();
 			if (member == null) {
-				if (object.hasMember() || in.peek() == VALUE_SEPARATOR) {
+				if (object.hasMember() || in.peek() == VALUE_SEPARATOR)
 					throw new SyntaxError("missing member in object");
-				}
 				break;
 			}
 			object.addMember(member);
 			skipWhitespace();
-			if (in.peek() == VALUE_SEPARATOR) {
-				require(VALUE_SEPARATOR);
-			} else {
-				break;
-			}
-		}
-		require(END_OBJECT);
+		} while (skip(VALUE_SEPARATOR));
+		accept(END_OBJECT);
 		return object;
 	}
 
-	private void require(char c) throws IOException, SyntaxError {
+	private boolean skip(char c) throws IOException, SyntaxError {
+		boolean skip = in.peek() == c;
+		if (skip) in.pop();
+		return skip;
+	}
+
+	private void accept(char c) throws IOException, SyntaxError {
 		int next = in.pop();
-		if (next == -1) {
-			throw new SyntaxError("encountered EOF while expecting '" + c + "'");
-		}
-		if (next != c) {
+		if (next == -1)
+			throw new SyntaxError("unexpected end of input (expected '" + c + "')");
+		if (next != c)
 			throw new SyntaxError("unexpected character (was '" +
 				((char) next) + "', expected '" + c + "')");
-		}
 	}
 
 	private JsonMember parseMember() throws IOException, SyntaxError {
-		if (isString()) {
+		if (in.peek() == QUOTE_MARK) {
 			JsonString name = parseString();
 			skipWhitespace();
-			require(NAME_SEPARATOR);
+			accept(NAME_SEPARATOR);
 			skipWhitespace();
 			JsonValue value = parseValue();
-			if (value == null) {
+			if (value == null)
 				throw new SyntaxError("missing value for object member");
-			}
 			return new JsonMember(name.getValue(), value);
-		} else {
-			return null;
 		}
+		return null;
 	}
 }

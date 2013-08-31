@@ -51,17 +51,15 @@
 		</javac>
 	</target>
 
-	<property name="test-reports.dir" location="test-reports"/>
-
 	<target name="test" depends="build" description="run JSON tests">
-		<mkdir dir="${test-reports.dir}"/>
 		<junit fork="yes" showoutput="yes">
 			<classpath>
 				<pathelement path="${bin.dir}"/>
 				<pathelement path="${lib.dir}/junit-4.11.jar"/>
 				<pathelement path="${lib.dir}/hamcrest-core-1.3.jar"/>
 			</classpath>
-			<test name="tests.TestJsonData" todir="${test-reports.dir}"/>
+			<test name="tests.TestParsing"/>
+			<test name="tests.TestJsonData"/>
 			<formatter classname="ant.SimpleTestFormatter" usefile="false"/>
 		</junit>
 	</target>

@@ -187,6 +187,32 @@ public class TestParsing {
 		}
 	}
 
+	@Test
+	public void testTrailingGarbage_1() throws IOException, SyntaxError {
+		try {
+			String json = "[ ] x";
+			ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
+			JsonParser parser = new JsonParser(in);
+			assertTrue(parser.parse() instanceof JsonArray);
+			fail("expected syntax error!");
+		} catch (SyntaxError e) {
+			assertEquals("Syntax Error: garbage at end of input", e.getMessage());
+		}
+	}
+
+	@Test
+	public void testTrailingGarbage_2() throws IOException, SyntaxError {
+		try {
+			String json = "[ ] [ ]";
+			ByteArrayInputStream in = new ByteArrayInputStream(json.getBytes());
+			JsonParser parser = new JsonParser(in);
+			assertTrue(parser.parse() instanceof JsonArray);
+			fail("expected syntax error!");
+		} catch (SyntaxError e) {
+			assertEquals("Syntax Error: garbage at end of input", e.getMessage());
+		}
+	}
+
 	private static void testArray(JsonValue value, Class<?>... elementTypes) {
 		assertTrue(value instanceof JsonArray);
 		JsonArray array = (JsonArray) value;

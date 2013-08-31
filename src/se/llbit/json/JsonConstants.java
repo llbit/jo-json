@@ -13,5 +13,4 @@ public interface JsonConstants {
 	char[] NULL = "null".toCharArray();
 	char QUOTE_MARK = '"';
 	char ESCAPE = '\\';
-
 }
