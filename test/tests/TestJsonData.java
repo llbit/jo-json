@@ -24,6 +24,7 @@ import se.llbit.json.JsonParser.SyntaxError;
 
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("javadoc")
 @RunWith(Parameterized.class)
 public class TestJsonData {
 	private static String SYS_LINE_SEP = System.getProperty("line.separator");
@@ -78,7 +79,6 @@ public class TestJsonData {
 		return theString;
 	}
 
-	@SuppressWarnings("javadoc")
 	@Parameters(name = "{0}")
 	public static Iterable<Object[]> getTests() {
 		Collection<Object[]> tests = new LinkedList<Object[]>();
