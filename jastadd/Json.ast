@@ -1,5 +1,7 @@
 abstract JsonValue;
 
+JsonUnknown : JsonValue;
+
 abstract JsonLiteral : JsonValue;
 
 JsonFalse : JsonLiteral;

@@ -1,4 +1,7 @@
 aspect Json {
+
+	public static JsonUnknown JsonUnknown.INSTANCE = new JsonUnknown();
+
 	/**
 	 * Retrieves the value of a member in this JSON object.
 	 * @param name the name to search for
@@ -10,16 +13,34 @@ aspect Json {
 				return member.getValue();
 			}
 		}
-		return null;
+		return JsonUnknown.INSTANCE;
 	}
-	
+
+	syn boolean JsonObject.hasMember(String name) {
+		for (JsonMember member: getMemberList()) {
+			if (member.getName().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	syn boolean JsonValue.isUnknown() = false;
+	eq JsonUnknown.isUnknown() = true;
+
+	syn JsonObject JsonValue.object() = new JsonObject();
+	eq JsonObject.object() = this;
+
+	syn JsonArray JsonValue.array() = new JsonArray();
+	eq JsonArray.array() = this;
+
 	/**
 	 * @param undefined value returned if this is not a JSON string.
 	 * @return the JSON string value
 	 */
 	syn String JsonValue.stringValue(String undefined) = undefined;
 	eq JsonString.stringValue(String undefined) = getValue();
-	
+
 	/**
 	 * @param undefined value returned if this is not a JSON number.
 	 * @return the JSON number value
