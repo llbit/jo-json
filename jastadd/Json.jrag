@@ -34,6 +34,22 @@ aspect Json {
 	syn JsonArray JsonValue.array() = new JsonArray();
 	eq JsonArray.array() = this;
 
+	public void JsonObject.addMember(String name, JsonValue value) {
+		addMember(new JsonMember(name, value));
+	}
+
+	public void JsonObject.addMember(String name, String value) {
+		addMember(new JsonMember(name, new JsonString(value)));
+	}
+
+	public void JsonObject.addMember(String name, int value) {
+		addMember(new JsonMember(name, new JsonNumber(""+value)));
+	}
+
+	public void JsonArray.add(JsonValue element) {
+		addElement(element);
+	}
+
 	/**
 	 * @param undefined value returned if this is not a JSON string.
 	 * @return the JSON string value
