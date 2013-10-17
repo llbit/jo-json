@@ -15,6 +15,21 @@ aspect Json {
 		}
 		return JsonUnknown.INSTANCE;
 	}
+	
+	/**
+	 * Modify first member with the given name, or add a new member.
+	 * @param name
+	 * @param value
+	 */ 
+	public void JsonObject.set(String name, JsonValue value) {
+		for (int i = 0; i < getNumMember(); ++i) {
+			if (getMember(i).getName().equals(name)) {
+				getMember(i).setValue(value);
+				return;
+			}
+		}
+		add(name, value);
+	}
 
 	syn boolean JsonObject.hasMember(String name) {
 		for (JsonMember member: getMemberList()) {
@@ -33,6 +48,15 @@ aspect Json {
 
 	syn JsonArray JsonValue.array() = new JsonArray();
 	eq JsonArray.array() = this;
+
+	/**
+	 * Add a member to the Json object.
+	 * @param name
+	 * @param value
+	 */ 
+	public void JsonObject.add(String name, JsonValue value) {
+		addMember(new JsonMember(name, value));
+	}
 
 	public void JsonObject.addMember(String name, JsonValue value) {
 		addMember(new JsonMember(name, value));

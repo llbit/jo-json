@@ -1,11 +1,21 @@
 package se.llbit.json;
 
+import static se.llbit.json.JsonConstants.BEGIN_ARRAY;
+import static se.llbit.json.JsonConstants.BEGIN_OBJECT;
+import static se.llbit.json.JsonConstants.END_ARRAY;
+import static se.llbit.json.JsonConstants.END_OBJECT;
+import static se.llbit.json.JsonConstants.ESCAPE;
+import static se.llbit.json.JsonConstants.FALSE;
+import static se.llbit.json.JsonConstants.NAME_SEPARATOR;
+import static se.llbit.json.JsonConstants.NULL;
+import static se.llbit.json.JsonConstants.QUOTE_MARK;
+import static se.llbit.json.JsonConstants.TRUE;
+import static se.llbit.json.JsonConstants.VALUE_SEPARATOR;
+
 import java.io.IOException;
 import java.io.InputStream;
 
 import se.llbit.io.LookaheadReader;
-
-import static se.llbit.json.JsonConstants.*;
 
 /**
  * Parses JSON
@@ -58,7 +68,9 @@ public class JsonParser {
 		if (in.peek() != -1) {
 			throw new SyntaxError("garbage at end of input");
 		}
-		return value;
+		// attach value to tree
+		JsonRoot root = new JsonRoot(value);
+		return root.getValue();
 	}
 
 	private JsonArray parseArray() throws IOException, SyntaxError {

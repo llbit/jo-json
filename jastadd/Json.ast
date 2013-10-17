@@ -1,3 +1,5 @@
+JsonRoot ::= Value:JsonValue;
+
 abstract JsonValue;
 
 JsonUnknown : JsonValue;
