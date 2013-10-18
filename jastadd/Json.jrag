@@ -101,4 +101,12 @@ aspect Json {
 	 */
 	syn double JsonValue.doubleValue(double undefined) = undefined;
 	eq JsonNumber.doubleValue(double undefined) = Double.parseDouble(getValue());
+
+	/**
+	 * @param undefined value returned if this is not a JSON number.
+	 * @return the JSON number value
+	 */
+	syn boolean JsonValue.boolValue(boolean undefined) = undefined;
+	eq JsonTrue.boolValue(boolean undefined) = true;
+	eq JsonFalse.boolValue(boolean undefined) = false;
 }
