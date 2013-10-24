@@ -13,6 +13,7 @@
 		classpath="${tools.dir}/jastadd2.jar" />
 
 	<target name="clean">
+		<delete dir="${bin.dir}"/>
 		<delete>
 			<fileset dir="${gen.dir}" includes="**/*.java" />
 		</delete>
