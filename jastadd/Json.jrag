@@ -109,4 +109,66 @@ aspect Json {
 	syn boolean JsonValue.boolValue(boolean undefined) = undefined;
 	eq JsonTrue.boolValue(boolean undefined) = true;
 	eq JsonFalse.boolValue(boolean undefined) = false;
+
+	@Override
+	public String JsonMember.toString() {
+		return getName() + " : " + getValue().toString();
+	}
+
+	@Override
+	public String JsonTrue.toString() {
+		return "true";
+	}
+
+	@Override
+	public String JsonFalse.toString() {
+		return "false";
+	}
+
+	@Override
+	public String JsonNull.toString() {
+		return "null";
+	}
+
+	@Override
+	public String JsonNumber.toString() {
+		return getValue();
+	}
+
+	@Override
+	public String JsonString.toString() {
+		return "\"" + getValue() + "\"";
+	}
+
+	@Override
+	public String JsonObject.toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{ ");
+		boolean first = true;
+		for (JsonMember member: getMemberList()) {
+			if (!first) {
+				sb.append(", ");
+			}
+			first = false;
+			sb.append(member.toString());
+		}
+		sb.append(" }");
+		return sb.toString();
+	}
+
+	@Override
+	public String JsonArray.toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[ ");
+		boolean first = true;
+		for (JsonValue element: getElementList()) {
+			if (!first) {
+				sb.append(", ");
+			}
+			first = false;
+			sb.append(element.toString());
+		}
+		sb.append(" ]");
+		return sb.toString();
+	}
 }
