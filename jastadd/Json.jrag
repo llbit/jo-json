@@ -92,6 +92,13 @@ aspect Json {
 	 * @param undefined value returned if this is not a JSON number.
 	 * @return the JSON number value
 	 */
+	syn long JsonValue.longValue(long undefined) = undefined;
+	eq JsonNumber.longValue(long undefined) = Long.parseLong(getValue());
+
+	/**
+	 * @param undefined value returned if this is not a JSON number.
+	 * @return the JSON number value
+	 */
 	syn float JsonValue.floatValue(float undefined) = undefined;
 	eq JsonNumber.floatValue(float undefined) = Float.parseFloat(getValue());
 
