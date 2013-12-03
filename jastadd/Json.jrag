@@ -2,6 +2,14 @@ aspect Json {
 
 	public static JsonUnknown JsonUnknown.INSTANCE = new JsonUnknown();
 
+	public JsonNumber.JsonNumber(long value) {
+		this("" + value);
+	}
+
+	public JsonNumber.JsonNumber(double value) {
+		this(String.format("%.6f", value));
+	}
+
 	/**
 	 * Retrieves the value of a member in this JSON object.
 	 * @param name the name to search for
