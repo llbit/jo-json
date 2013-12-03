@@ -7,6 +7,8 @@
 	<property name="tools.dir" location="${basedir}/tools" />
 	<property name="lib.dir" location="${basedir}/lib" />
 
+	<property name="version" value="1.0.0" />
+
 	<!-- jastadd taskdef -->
 	<taskdef name="jastadd"
 		classname="org.jastadd.JastAddTask"
@@ -17,6 +19,14 @@
 		<delete>
 			<fileset dir="${gen.dir}" includes="**/*.java" />
 		</delete>
+	</target>
+
+	<target name="jar" depends="build" description="build JAR library">
+		<jar destfile="json-${version}.jar">
+			<fileset dir="${bin.dir}">
+				<include name="**/*"/>
+			</fileset>
+		</jar>
 	</target>
 
 	<target name="gen" description="generate source files">
