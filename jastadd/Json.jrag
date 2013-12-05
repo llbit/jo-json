@@ -63,19 +63,19 @@ aspect Json {
 	 * @param value
 	 */ 
 	public void JsonObject.add(String name, JsonValue value) {
-		addMember(new JsonMember(name, value));
+		addMember(new JsonMember(ASTNode.escape(name), value));
 	}
 
 	public void JsonObject.addMember(String name, JsonValue value) {
-		addMember(new JsonMember(name, value));
+		addMember(new JsonMember(ASTNode.escape(name), value));
 	}
 
 	public void JsonObject.addMember(String name, String value) {
-		addMember(new JsonMember(name, new JsonString(value)));
+		addMember(new JsonMember(ASTNode.escape(name), new JsonString(value)));
 	}
 
 	public void JsonObject.addMember(String name, int value) {
-		addMember(new JsonMember(name, new JsonNumber(""+value)));
+		addMember(new JsonMember(ASTNode.escape(name), new JsonNumber(""+value)));
 	}
 
 	public void JsonArray.add(JsonValue element) {
@@ -186,4 +186,5 @@ aspect Json {
 		sb.append(" ]");
 		return sb.toString();
 	}
+
 }
