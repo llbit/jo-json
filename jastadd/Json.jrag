@@ -61,25 +61,45 @@ aspect Json {
 	 * Add a member to the Json object.
 	 * @param name
 	 * @param value
-	 */ 
+	 */
 	public void JsonObject.add(String name, JsonValue value) {
 		addMember(new JsonMember(ASTNode.escape(name), value));
 	}
 
-	public void JsonObject.addMember(String name, JsonValue value) {
-		addMember(new JsonMember(ASTNode.escape(name), value));
+	public void JsonObject.add(String name, String value) {
+		add(name, new JsonString(value));
 	}
 
-	public void JsonObject.addMember(String name, String value) {
-		addMember(new JsonMember(ASTNode.escape(name), new JsonString(value)));
+	public void JsonObject.add(String name, long value) {
+		add(name, new JsonNumber(value));
 	}
 
-	public void JsonObject.addMember(String name, int value) {
-		addMember(new JsonMember(ASTNode.escape(name), new JsonNumber(""+value)));
+	public void JsonObject.add(String name, double value) {
+		add(name, new JsonNumber(value));
+	}
+
+	public void JsonObject.add(String name, boolean value) {
+		add(name, value ? new JsonTrue() : new JsonFalse());
 	}
 
 	public void JsonArray.add(JsonValue element) {
 		addElement(element);
+	}
+
+	public void JsonArray.add(String value) {
+		addElement(new JsonString(value));
+	}
+
+	public void JsonArray.add(long value) {
+		addElement(new JsonNumber(value));
+	}
+
+	public void JsonArray.add(double value) {
+		addElement(new JsonNumber(value));
+	}
+
+	public void JsonArray.add(boolean value) {
+		addElement(value ? new JsonTrue() : new JsonFalse());
 	}
 
 	/**
