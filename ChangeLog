@@ -1,0 +1,1 @@
+    * JsonObject.add now escapes the member name
