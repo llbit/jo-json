@@ -72,6 +72,7 @@
 			<test name="tests.TestAPI"/>
 			<test name="tests.TestParsing"/>
 			<test name="tests.TestJsonData"/>
+			<test name="tests.TestJsonNumber"/>
 			<test name="tests.TestStringEscape"/>
 			<formatter classname="ant.SimpleTestFormatter" usefile="false"/>
 		</junit>

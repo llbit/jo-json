@@ -1,1 +1,2 @@
+    * Serializing and parsing floats now works
     * JsonObject.add now escapes the member name

@@ -3,11 +3,11 @@ aspect Json {
 	public static JsonUnknown JsonUnknown.INSTANCE = new JsonUnknown();
 
 	public JsonNumber.JsonNumber(long value) {
-		this("" + value);
+		this(Long.toString(value));
 	}
 
 	public JsonNumber.JsonNumber(double value) {
-		this(String.format("%.6f", value));
+		this(Double.toString(value));
 	}
 
 	/**
@@ -23,12 +23,12 @@ aspect Json {
 		}
 		return JsonUnknown.INSTANCE;
 	}
-	
+
 	/**
 	 * Modify first member with the given name, or add a new member.
 	 * @param name
 	 * @param value
-	 */ 
+	 */
 	public void JsonObject.set(String name, JsonValue value) {
 		for (int i = 0; i < getNumMember(); ++i) {
 			if (getMember(i).getName().equals(name)) {
@@ -94,28 +94,28 @@ aspect Json {
 	 * @return the JSON number value
 	 */
 	syn int JsonValue.intValue(int undefined) = undefined;
-	eq JsonNumber.intValue(int undefined) = Integer.parseInt(getValue());
+	eq JsonNumber.intValue(int undefined) = Integer.valueOf(getValue());
 
 	/**
 	 * @param undefined value returned if this is not a JSON number.
 	 * @return the JSON number value
 	 */
 	syn long JsonValue.longValue(long undefined) = undefined;
-	eq JsonNumber.longValue(long undefined) = Long.parseLong(getValue());
+	eq JsonNumber.longValue(long undefined) = Long.valueOf(getValue());
 
 	/**
 	 * @param undefined value returned if this is not a JSON number.
 	 * @return the JSON number value
 	 */
 	syn float JsonValue.floatValue(float undefined) = undefined;
-	eq JsonNumber.floatValue(float undefined) = Float.parseFloat(getValue());
+	eq JsonNumber.floatValue(float undefined) = Float.valueOf(getValue());
 
 	/**
 	 * @param undefined value returned if this is not a JSON number.
 	 * @return the JSON number value
 	 */
 	syn double JsonValue.doubleValue(double undefined) = undefined;
-	eq JsonNumber.doubleValue(double undefined) = Double.parseDouble(getValue());
+	eq JsonNumber.doubleValue(double undefined) = Double.valueOf(getValue());
 
 	/**
 	 * @param undefined value returned if this is not a JSON number.
