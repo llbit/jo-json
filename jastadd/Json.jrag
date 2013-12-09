@@ -63,7 +63,9 @@ aspect Json {
 	 * @param value
 	 */
 	public void JsonObject.add(String name, JsonValue value) {
-		addMember(new JsonMember(ASTNode.escape(name), value));
+		if (value != null) {
+			addMember(new JsonMember(ASTNode.escape(name), value));
+		}
 	}
 
 	public void JsonObject.add(String name, String value) {
