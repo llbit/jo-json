@@ -157,7 +157,7 @@ aspect Json {
 
 	@Override
 	public String JsonMember.toString() {
-		return getName() + " : " + getValue().toString();
+		return "\"" + getName() + "\" : " + getValue().toString();
 	}
 
 	@Override
