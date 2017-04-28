@@ -1,11 +1,11 @@
 JsonString [["#escaped"]]
 JsonNumber [[$Value]]
-JsonArray [[[
+JsonArray [[$if(#hasElement)[
   $cat($ElementList, ",\n")
-]]]
-JsonObject [[{
+]$else[]$endif]]
+JsonObject [[$if(#hasMember){
   $cat($MemberList, ",\n")
-}]]
+}$else{}$endif]]
 JsonMember [["$Name": $Value]]
 JsonFalse [[false]]
 JsonTrue [[true]]

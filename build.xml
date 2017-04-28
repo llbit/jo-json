@@ -7,7 +7,7 @@
 	<property name="tools.dir" location="${basedir}/tools" />
 	<property name="lib.dir" location="${basedir}/lib" />
 
-	<property name="version" value="1.0.1" />
+	<property name="version" value="1.1.0" />
 
 	<!-- jastadd taskdef -->
 	<taskdef name="jastadd"

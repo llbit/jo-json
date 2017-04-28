@@ -5,5 +5,5 @@ aspect PrettyPrinting {
 	JsonValue implements PrettyPrintable;
 	JsonMember implements PrettyPrintable;
 
-	syn String JsonString.escaped() = ASTNode.escape(getValue());
+	syn String JsonString.escaped() = escape(getValue());
 }

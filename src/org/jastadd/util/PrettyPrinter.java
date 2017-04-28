@@ -1,27 +1,18 @@
-/* Copyright (c) 2013, Jesper Öqvist <jesper.oqvist@cs.lth.se>
- * All rights reserved.
+/* Copyright (c) 2013 Jesper Öqvist <jesper@llbit.se>
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the <organization> nor the
- *       names of its contributors may be used to endorse or promote products
- *       derived from this software without specific prior written permission.
+ * This file is part of Chunky.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL <COPYRIGHT HOLDER> BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * Chunky is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Chunky is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License
+ * along with Chunky.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jastadd.util;
 
@@ -33,103 +24,92 @@ import java.util.Stack;
  * @author Jesper Öqvist <jesper.oqvist@cs.lth.se>
  */
 public class PrettyPrinter {
-	private final String indentation;
-	private final java.util.List<String> ind = new ArrayList<String>(32);
-	{
-		ind.add("");
-	}
-	private final Stack<Integer> indentStack = new Stack<Integer>();
-	{
-		indentStack.push(0);
-	}
-	private int currentIndent = 0;
+  private final String indentation;
+  private final java.util.List<String> ind = new ArrayList<>(32);
 
-	private PrintStream out = System.out;
-	private boolean newline = false;
+  {
+    ind.add("");
+  }
 
-	/**
-	 * @param ind
-	 */
-	public PrettyPrinter(String ind) {
-		this.indentation = ind;
-	}
+  private final Stack<Integer> indentStack = new Stack<>();
 
-	/**
-	 * @param ind
-	 * @param target
-	 */
-	public PrettyPrinter(String ind, PrintStream target) {
-		this(ind);
-		out = target;
-	}
+  {
+    indentStack.push(0);
+  }
 
-	/**
-	 * @param target
-	 */
-	public void setTarget(PrintStream target) {
-		out = target;
-	}
+  private int currentIndent = 0;
 
-	/**
- 	 * @param level The level of indentation
- 	 * @return The indentation string for the given indentation level
- 	 */
-	public String getIndentation(int level) {
-		while (ind.size() < (level+1)) {
-			ind.add(ind.get(ind.size()-1) + indentation);
-		}
-		return ind.get(level);
-	}
+  private PrintStream out = System.out;
+  private boolean newline = false;
+
+  public PrettyPrinter(String ind) {
+    this.indentation = ind;
+  }
+
+  public PrettyPrinter(String ind, PrintStream target) {
+    this(ind);
+    out = target;
+  }
+
+  public void setTarget(PrintStream target) {
+    out = target;
+  }
+
+  /**
+   * @param level The level of indentation
+   * @return The indentation string for the given indentation level
+   */
+  public String getIndentation(int level) {
+    while (ind.size() < (level + 1)) {
+      ind.add(ind.get(ind.size() - 1) + indentation);
+    }
+    return ind.get(level);
+  }
 
 
-	/**
-	 * @param str
-	 */
-	public void print(String str) {
-		indentNewline();
-		out.print(str);
-	}
+  public void print(String str) {
+    indentNewline();
+    out.print(str);
+  }
 
-	/**
-	 *
-	 */
-	public void println() {
-		out.println();
-		newline = true;
-	}
+  /**
+   *
+   */
+  public void println() {
+    out.println();
+    newline = true;
+  }
 
-	/**
-	 * @param node
-	 */
-	public void print(PrettyPrintable node) {
-		pushIndentation();
-		node.prettyPrint(this);
-		popIndentation();
-	}
+  public void print(PrettyPrintable node) {
+    pushIndentation();
+    node.prettyPrint(this);
+    popIndentation();
+  }
 
-	/**
-	 * @param level
-	 */
-	public void indent(int level) {
-		indentNewline();
-		currentIndent = level;
-		out.print(getIndentation(level));
-	}
+  public void indent(int level) {
+    indentNewline();
+    currentIndent = level;
+    out.print(getIndentation(level));
+  }
 
-	private void pushIndentation() {
-		indentStack.push(currentIndent + indentStack.peek());
-		currentIndent = 0;
-	}
+  public void setIndent(int level) {
+    currentIndent = level;
+  }
 
-	private void popIndentation() {
-		currentIndent = indentStack.pop();
-		currentIndent -= indentStack.peek();
-	}
+  private void pushIndentation() {
+    indentStack.push(currentIndent + indentStack.peek());
+    currentIndent = 0;
+  }
 
-	private void indentNewline() {
-		if (newline) {
-			out.print(getIndentation(indentStack.peek()));
-			newline = false;
-		}
-	}
+  private void popIndentation() {
+    currentIndent = indentStack.pop();
+    currentIndent -= indentStack.peek();
+  }
+
+  private void indentNewline() {
+    if (newline) {
+      out.print(getIndentation(indentStack.peek()));
+      newline = false;
+    }
+  }
 }
