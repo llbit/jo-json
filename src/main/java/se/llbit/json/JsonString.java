@@ -52,11 +52,6 @@ public class JsonString extends JsonValue implements Cloneable {
     return "\"" + getValue() + "\"";
   }
 
-  /**
-   * Retrieves the value for the lexeme Value.
-   *
-   * @return The value for the lexeme Value.
-   */
   public String getValue() {
     return value;
   }

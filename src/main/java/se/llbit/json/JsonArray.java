@@ -43,16 +43,14 @@ public class JsonArray extends JsonValue implements Cloneable {
       out.print("[");
       out.println();
       out.indent(1);
-      {
-        boolean first = true;
-        for (PrettyPrintable p : getElementList()) {
-          if (!first) {
-            out.print(",");
-            out.println();
-          }
-          first = false;
-          out.print(p);
+      boolean first = true;
+      for (PrettyPrintable p : getElementList()) {
+        if (!first) {
+          out.print(",");
+          out.println();
         }
+        first = false;
+        out.print(p);
       }
       out.println();
       out.print("]");

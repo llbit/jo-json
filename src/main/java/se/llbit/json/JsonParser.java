@@ -63,7 +63,7 @@ public class JsonParser implements AutoCloseable {
 
   /**
    * Parse the JSON object from the given input.
-   * <p/>
+   *
    * <p>The input stream is not closed after being used.
    */
   public JsonParser(InputStream input) {

@@ -33,6 +33,14 @@ import org.jastadd.util.PrettyPrintable;
 import org.jastadd.util.PrettyPrinter;
 
 public class JsonMember implements PrettyPrintable {
+  private final String name;
+  private final JsonValue value;
+
+  public JsonMember(String name, JsonValue value) {
+    this.name = name;
+    this.value = value;
+  }
+
   public void prettyPrint(PrettyPrinter out) {
     out.print("\"");
     out.print(getName());
@@ -48,28 +56,10 @@ public class JsonMember implements PrettyPrintable {
     return "\"" + getName() + "\" : " + getValue().toString();
   }
 
-  final String name;
-  final JsonValue value;
-
-  public JsonMember(String p0, JsonValue p1) {
-    this.name = p0;
-    this.value = p1;
-  }
-
-  /**
-   * Retrieves the value for the lexeme Name.
-   *
-   * @return The value for the lexeme Name.
-   */
   public String getName() {
     return name;
   }
 
-  /**
-   * Retrieves the Value child.
-   *
-   * @return The current node used as the Value child.
-   */
   public JsonValue getValue() {
     return value;
   }

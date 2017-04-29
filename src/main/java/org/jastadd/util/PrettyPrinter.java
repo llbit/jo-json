@@ -58,10 +58,6 @@ public class PrettyPrinter {
   /**
    * @param ind indentation level.
    */
-  public PrettyPrinter(String ind) {
-    this(ind, System.out);
-  }
-
   public PrettyPrinter(String ind, PrintStream target) {
     this.indentation = ind;
     this.out = target;
