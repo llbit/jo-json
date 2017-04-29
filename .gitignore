@@ -1,13 +1,21 @@
+# Test data
+/data/*.json.out
+
+# Build artifacts
+/*.jar
+
+# Gradle
 /build/
 /.gradle/
 
-/data/*.json.out
-
-/*.jar
-
-# vim
+# Vim
 *.swp
 
+# IntelliJ
 /.idea/
 /*.iml
 
+# Eclipse
+/.settings/
+/.project
+/.classpath

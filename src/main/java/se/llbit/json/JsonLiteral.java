@@ -29,5 +29,6 @@
  */
 package se.llbit.json;
 
-public abstract class JsonLiteral extends JsonValue implements Cloneable {
+/** Abstract base class for JSON literals (strings, numbers, booleans, null, and unknown). */
+public abstract class JsonLiteral extends JsonValue {
 }

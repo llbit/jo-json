@@ -7,8 +7,9 @@ project.version = '1.2.0'
 project.group = 'se.llbit'
 project.archivesBaseName = 'sljson'
 
-sourceCompatibility = '1.6'
-targetCompatibility = '1.6'
+// Source level is JDK 7 because we use AutoCloseable.
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
 
 repositories {
 	mavenCentral()

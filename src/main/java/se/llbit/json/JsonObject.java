@@ -37,7 +37,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JsonObject extends JsonValue implements Cloneable {
+/**
+ * Represents a JSON object.
+ *
+ * <p>Members are stored in a list.
+ */
+public class JsonObject extends JsonValue {
   private final List<JsonMember> members = new ArrayList<JsonMember>();
 
   public void prettyPrint(PrettyPrinter out) {

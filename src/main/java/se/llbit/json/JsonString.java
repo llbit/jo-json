@@ -31,7 +31,8 @@ package se.llbit.json;
 
 import org.jastadd.util.PrettyPrinter;
 
-public class JsonString extends JsonValue implements Cloneable {
+/** Stores a JSON string literal. */
+public class JsonString extends JsonValue {
   private final String value;
 
   public JsonString(String value) {

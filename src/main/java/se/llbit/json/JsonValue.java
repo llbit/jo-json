@@ -31,6 +31,7 @@ package se.llbit.json;
 
 import org.jastadd.util.PrettyPrintable;
 
+/** Abstract base class for all JSON values. */
 public abstract class JsonValue implements PrettyPrintable {
   protected JsonValue() { }
 

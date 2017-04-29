@@ -32,6 +32,7 @@ package se.llbit.json;
 import org.jastadd.util.PrettyPrinter;
 
 public interface Json {
+  /** The JSON True literal. */
   JsonLiteral TRUE = new JsonLiteral() {
     @Override public void prettyPrint(PrettyPrinter out) {
       out.print("true");
@@ -50,6 +51,7 @@ public interface Json {
     }
   };
 
+  /** The JSON False literal. */
   JsonLiteral FALSE = new JsonLiteral() {
     @Override public void prettyPrint(PrettyPrinter out) {
       out.print("false");
@@ -68,6 +70,7 @@ public interface Json {
     }
   };
 
+  /** The JSON Unknown literal. */
   JsonValue UNKNOWN = new JsonValue() {
     @Override public void prettyPrint(PrettyPrinter out) {
       out.print("<unknown>");
@@ -82,6 +85,7 @@ public interface Json {
     }
   };
 
+  /** The JSON Null literal. */
   JsonLiteral NULL = new JsonLiteral() {
     @Override public void prettyPrint(PrettyPrinter out) {
       out.print("null");

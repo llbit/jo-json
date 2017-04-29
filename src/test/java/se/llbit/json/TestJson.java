@@ -32,7 +32,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for the Chunky JSON library.
+ * API tests for the JSON library.
  */
 public class TestJson {
   @Rule public ExpectedException thrown = ExpectedException.none();
