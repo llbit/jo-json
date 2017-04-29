@@ -1,6 +1,5 @@
-/bin
-/ant-bin
-/jastadd/GeneratedAspect.jadd
+/build/
+/.gradle/
 
 /data/*.json.out
 
@@ -8,3 +7,7 @@
 
 # vim
 *.swp
+
+/.idea/
+/*.iml
+
