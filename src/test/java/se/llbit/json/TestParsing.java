@@ -195,6 +195,38 @@ public class TestParsing {
     parse("[ \"\\uAFUE\" ]");
   }
 
+  /** Only hexadecimal digits supported in Unicode escape sequences. */
+  @Test public void testIllegalEscape4() throws IOException, SyntaxError {
+    thrown.expect(JsonParser.SyntaxError.class);
+    thrown.expectMessage(
+        "Syntax Error: in JSON string: non-hexadecimal digit '.' in Unicode escape sequence.");
+    parse("[ \"\\u.\" ]");
+  }
+
+  /** Only hexadecimal digits supported in Unicode escape sequences. */
+  @Test public void testIllegalEscape5() throws IOException, SyntaxError {
+    thrown.expect(JsonParser.SyntaxError.class);
+    thrown.expectMessage(
+        "Syntax Error: in JSON string: non-hexadecimal digit '@' in Unicode escape sequence.");
+    parse("[ \"\\u@\" ]");
+  }
+
+  /** Only hexadecimal digits supported in Unicode escape sequences. */
+  @Test public void testIllegalEscape6() throws IOException, SyntaxError {
+    thrown.expect(JsonParser.SyntaxError.class);
+    thrown.expectMessage(
+        "Syntax Error: in JSON string: non-hexadecimal digit '_' in Unicode escape sequence.");
+    parse("[ \"\\u_\" ]");
+  }
+
+  /** Only hexadecimal digits supported in Unicode escape sequences. */
+  @Test public void testIllegalEscape7() throws IOException, SyntaxError {
+    thrown.expect(JsonParser.SyntaxError.class);
+    thrown.expectMessage(
+        "Syntax Error: in JSON string: non-hexadecimal digit '}' in Unicode escape sequence.");
+    parse("[ \"\\u}\" ]");
+  }
+
   /** String terminating in the middle of escape sequence. */
   @Test public void testEofInString() throws IOException, SyntaxError {
     thrown.expect(JsonParser.SyntaxError.class);

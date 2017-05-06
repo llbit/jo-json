@@ -34,6 +34,7 @@ import org.jastadd.util.PrettyPrinter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -42,7 +43,7 @@ import java.util.Map;
  *
  * <p>Members are stored in a list.
  */
-public class JsonObject extends JsonValue {
+public class JsonObject extends JsonValue implements Iterable<JsonMember> {
   private final List<JsonMember> members = new ArrayList<JsonMember>();
 
   public void prettyPrint(PrettyPrinter out) {
@@ -186,15 +187,6 @@ public class JsonObject extends JsonValue {
   }
 
   /**
-   * Retrieves the Member list.
-   *
-   * @return The node representing the Member list.
-   */
-  public List<JsonMember> getMembers() {
-    return members;
-  }
-
-  /**
    * Build a map associating the member names to member values.
    */
   public Map<String, JsonValue> toMap() {
@@ -237,5 +229,9 @@ public class JsonObject extends JsonValue {
 
   public boolean isEmpty() {
     return !hasMember();
+  }
+
+  @Override public Iterator<JsonMember> iterator() {
+    return members.iterator();
   }
 }

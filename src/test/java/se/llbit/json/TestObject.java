@@ -31,6 +31,8 @@ package se.llbit.json;
 
 import org.junit.Test;
 
+import java.util.Iterator;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
@@ -65,5 +67,16 @@ public class TestObject {
     assertNotSame(object, Json.of("bort").object());
     assertNotSame(object, object.asArray().object());
     assertNotSame(object, object.array().asObject());
+  }
+
+  @Test public void testIterator() {
+    JsonObject array = new JsonObject();
+    array.add("x", "!");
+    array.add("y", 1);
+
+    Iterator<JsonMember> iterator = array.iterator();
+    assertEquals("x", iterator.next().name);
+    assertEquals("y", iterator.next().name);
+    assertFalse(iterator.hasNext());
   }
 }

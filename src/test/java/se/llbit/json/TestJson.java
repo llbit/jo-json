@@ -348,6 +348,13 @@ public class TestJson {
     parse("{ \"abc\": 123");
   }
 
+  /** Missing member in object. */
+  @Test public void testSyntaxError19() throws IOException, JsonParser.SyntaxError {
+    thrown.expect(JsonParser.SyntaxError.class);
+    thrown.expectMessage("Syntax Error: missing member in object.");
+    parse("{ ,");
+  }
+
   @Test public void testToMap() {
     JsonArray array = new JsonArray();
     array.add("!");

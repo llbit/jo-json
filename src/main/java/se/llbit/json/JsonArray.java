@@ -33,12 +33,13 @@ import org.jastadd.util.PrettyPrintable;
 import org.jastadd.util.PrettyPrinter;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Represents a JSON array. Elements are stored in a list.
  */
-public class JsonArray extends JsonValue {
+public class JsonArray extends JsonValue implements Iterable<JsonValue> {
   List<JsonValue> elements = new ArrayList<JsonValue>();
 
   public void prettyPrint(PrettyPrinter out) {
@@ -192,5 +193,9 @@ public class JsonArray extends JsonValue {
   }
   public boolean isEmpty() {
     return !hasElement();
+  }
+
+  @Override public Iterator<JsonValue> iterator() {
+    return elements.iterator();
   }
 }
