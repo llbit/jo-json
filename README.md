@@ -35,7 +35,7 @@ try (JsonParser parser = new JsonParser(inputStream)) {
   JsonValue json = parser.parse();
   for (JsonValue entry : json.asArray()) {
     JsonObject person = entry.asObject();
-    String name = person.get("name").asInt("name");
+    String name = person.get("name").asString("name");
     int age = person.get("age").asInt(-1);
     System.out.format("%s is %d years old%n", name, age);
   }
