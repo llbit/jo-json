@@ -51,6 +51,17 @@ public class TestObject {
     assertEquals(20, object.get("bort").asInt(0));
     assertEquals(12, object.get("lisa").asInt(0));
     assertFalse(object.isEmpty());
+    assertEquals(3, object.size());
+  }
+
+  /** Multiple members can have the same name. */
+  @Test public void testDuplicateAdd() {
+    JsonObject object = new JsonObject();
+    assertTrue(object.isEmpty());
+    object.add("bart", 10);
+    object.add("bort", -10);
+    object.add("bort", Json.of(20));
+    assertEquals(3, object.size());
   }
 
   @Test(expected = NullPointerException.class)
@@ -70,13 +81,47 @@ public class TestObject {
   }
 
   @Test public void testIterator() {
-    JsonObject array = new JsonObject();
-    array.add("x", "!");
-    array.add("y", 1);
+    JsonObject object = new JsonObject();
+    object.add("x", "!");
+    object.add("y", 1);
 
-    Iterator<JsonMember> iterator = array.iterator();
+    Iterator<JsonMember> iterator = object.iterator();
     assertEquals("x", iterator.next().name);
     assertEquals("y", iterator.next().name);
     assertFalse(iterator.hasNext());
+  }
+
+  /** Member access by index. */
+  @Test public void testGetMember() {
+    JsonObject object = new JsonObject();
+    object.add("x", "!");
+    object.add("y", 1);
+
+    assertEquals("y", object.getMember(1).name);
+    assertEquals("x", object.getMember(0).name);
+  }
+
+  /** Member index out of bounds raises an exception. */
+  @Test(expected = IndexOutOfBoundsException.class)
+  public void testGetMemberErr1() {
+    JsonObject object = new JsonObject();
+    object.add("x", "!");
+    object.add("y", 1);
+    object.getMember(3);
+  }
+
+  /** Member index out of bounds raises an exception. */
+  @Test(expected = IndexOutOfBoundsException.class)
+  public void testGetMemberErr2() {
+    JsonObject object = new JsonObject();
+    object.getMember(0);
+  }
+
+  /** Member index out of bounds raises an exception. */
+  @Test(expected = IndexOutOfBoundsException.class)
+  public void testGetMemberErr3() {
+    JsonObject object = new JsonObject();
+    object.add("y", 1);
+    object.getMember(-1);
   }
 }

@@ -47,13 +47,13 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
   private final List<JsonMember> members = new ArrayList<JsonMember>();
 
   public void prettyPrint(PrettyPrinter out) {
-    if (hasMember()) {
+    if (!isEmpty()) {
       out.print("{");
       out.println();
       out.indent(1);
       {
         boolean first = true;
-        for (PrettyPrintable p : getMemberList()) {
+        for (PrettyPrintable p : members) {
           if (!first) {
             out.print(",");
             out.println();
@@ -73,7 +73,7 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
    * Modify first member with the given name, or add a new member.
    */
   public void set(String name, JsonValue value) {
-    for (int i = 0; i < getNumMember(); ++i) {
+    for (int i = 0; i < size(); ++i) {
       if (getMember(i).getName().equals(name)) {
         members.set(i, new JsonMember(name, value));
         return;
@@ -114,7 +114,7 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
     StringBuilder sb = new StringBuilder();
     sb.append("{");
     boolean first = true;
-    for (JsonMember member : getMemberList()) {
+    for (JsonMember member : members) {
       if (!first) {
         sb.append(",");
       }
@@ -129,7 +129,7 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
     StringBuilder sb = new StringBuilder();
     sb.append("{ ");
     boolean first = true;
-    for (JsonMember member : getMemberList()) {
+    for (JsonMember member : members) {
       if (!first) {
         sb.append(", ");
       }
@@ -141,31 +141,20 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
   }
 
   /**
-   * Retrieves the number of children in the Member list.
-   *
-   * @return Number of children in the Member list.
+   * Compute the number of members in this JSON object.
    */
-  public int getNumMember() {
+  public int size() {
     return members.size();
   }
 
   /**
-   * Retrieves the element at index {@code i} in the Member list.
+   * Retrieves the member at index {@code i}.
    *
-   * @param i Index of the element to return.
-   * @return The element at position {@code i} in the Member list.
+   * @param i index of the member to return.
+   * @throws IndexOutOfBoundsException if the given index is not valid.
    */
   public JsonMember getMember(int i) {
     return members.get(i);
-  }
-
-  /**
-   * Check whether the Member list has any children.
-   *
-   * @return {@code true} if it has at least one child, {@code false} otherwise.
-   */
-  public boolean hasMember() {
-    return !members.isEmpty();
   }
 
   /**
@@ -178,20 +167,11 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
   }
 
   /**
-   * Retrieves the Member list.
-   *
-   * @return The node representing the Member list.
-   */
-  public List<JsonMember> getMemberList() {
-    return members;
-  }
-
-  /**
    * Build a map associating the member names to member values.
    */
   public Map<String, JsonValue> toMap() {
     Map<String, JsonValue> map = new HashMap<String, JsonValue>();
-    for (JsonMember member : getMemberList()) {
+    for (JsonMember member : members) {
       if (!map.containsKey(member.getName())) {
         // Only the first occurrence of a member is mapped.
         map.put(member.getName(), member.getValue());
@@ -207,7 +187,7 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
    * @return the JSON member value for the first member with the given name
    */
   public JsonValue get(String name) {
-    for (JsonMember member : getMemberList()) {
+    for (JsonMember member : members) {
       if (member.getName().equals(name)) {
         return member.getValue();
       }
@@ -228,7 +208,7 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
   }
 
   public boolean isEmpty() {
-    return !hasMember();
+    return members.isEmpty();
   }
 
   @Override public Iterator<JsonMember> iterator() {

@@ -43,12 +43,12 @@ public class JsonArray extends JsonValue implements Iterable<JsonValue> {
   List<JsonValue> elements = new ArrayList<JsonValue>();
 
   public void prettyPrint(PrettyPrinter out) {
-    if (hasElement()) {
+    if (!isEmpty()) {
       out.print("[");
       out.println();
       out.indent(1);
       boolean first = true;
-      for (PrettyPrintable p : getElementList()) {
+      for (PrettyPrintable p : elements) {
         if (!first) {
           out.print(",");
           out.println();
@@ -106,20 +106,18 @@ public class JsonArray extends JsonValue implements Iterable<JsonValue> {
 
   /**
    * Get the element at the given index.
+   *
+   * @throws IndexOutOfBoundsException if the given index is not valid.
    */
   public JsonValue get(int index) {
-    if (index >= 0 && index < elements.size()) {
-      return elements.get(index);
-    } else {
-      return Json.UNKNOWN;
-    }
+    return elements.get(index);
   }
 
   public String toCompactString() {
     StringBuilder sb = new StringBuilder();
     sb.append("[");
     boolean first = true;
-    for (JsonValue element : getElementList()) {
+    for (JsonValue element : elements) {
       if (!first) {
         sb.append(",");
       }
@@ -134,7 +132,7 @@ public class JsonArray extends JsonValue implements Iterable<JsonValue> {
     StringBuilder sb = new StringBuilder();
     sb.append("[ ");
     boolean first = true;
-    for (JsonValue element : getElementList()) {
+    for (JsonValue element : this) {
       if (!first) {
         sb.append(", ");
       }
@@ -148,17 +146,8 @@ public class JsonArray extends JsonValue implements Iterable<JsonValue> {
   /**
    * Gives the current number of elements in this array.
    */
-  public int getNumElement() {
+  public int size() {
     return elements.size();
-  }
-
-  /**
-   * Determine if this array has any elements.
-   *
-   * @return {@code true} if it has at least one child, {@code false} otherwise.
-   */
-  public boolean hasElement() {
-    return !elements.isEmpty();
   }
 
   /**
@@ -169,15 +158,6 @@ public class JsonArray extends JsonValue implements Iterable<JsonValue> {
    */
   public void set(int i, JsonValue value) {
     elements.set(i, value);
-  }
-
-  /**
-   * Retrieves the Element list.
-   *
-   * @return a mutable reference to the internal element list of this array.
-   */
-  public List<JsonValue> getElementList() {
-    return elements;
   }
 
   public boolean isArray() {
@@ -192,7 +172,7 @@ public class JsonArray extends JsonValue implements Iterable<JsonValue> {
     return this;
   }
   public boolean isEmpty() {
-    return !hasElement();
+    return elements.isEmpty();
   }
 
   @Override public Iterator<JsonValue> iterator() {

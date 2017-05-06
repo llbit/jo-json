@@ -62,6 +62,7 @@ public class TestArray {
     assertEquals(false, array.get(6).boolValue(true));
     assertSame(Json.NULL, array.get(7));
     assertFalse(array.isEmpty());
+    assertEquals(8, array.size());
   }
 
   /** The set method can modify existing elements and insert out-of-order. */
@@ -125,5 +126,29 @@ public class TestArray {
     assertTrue(iterator.next() instanceof JsonString);
     assertTrue(iterator.next() instanceof JsonNumber);
     assertFalse(iterator.hasNext());
+  }
+
+  /** Element index out of bounds raises an exception. */
+  @Test(expected = IndexOutOfBoundsException.class)
+  public void testGetErr1() {
+    JsonArray array = new JsonArray();
+    array.add("x");
+    array.add("y");
+    array.get(3);
+  }
+
+  /** Element index out of bounds raises an exception. */
+  @Test(expected = IndexOutOfBoundsException.class)
+  public void testGetErr2() {
+    JsonArray array = new JsonArray();
+    array.get(0);
+  }
+
+  /** Element index out of bounds raises an exception. */
+  @Test(expected = IndexOutOfBoundsException.class)
+  public void testGetErr3() {
+    JsonArray array = new JsonArray();
+    array.add("y");
+    array.get(-1);
   }
 }

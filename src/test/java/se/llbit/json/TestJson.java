@@ -62,13 +62,13 @@ public class TestJson {
 
   /** Possible to parse empty objects. */
   @Test public void testEmptyObject() throws IOException, JsonParser.SyntaxError {
-    assertEquals(0, parse("{}").object().getNumMember());
+    assertEquals(0, parse("{}").object().size());
   }
 
   /** Simple JSON object. */
   @Test public void testObject1() throws IOException, JsonParser.SyntaxError {
     JsonObject object = parse("{\"a\":\"a\", \"b\": -1}").object();
-    assertEquals(2, object.getNumMember());
+    assertEquals(2, object.size());
     assertEquals("a", object.get("a").stringValue(""));
     assertEquals(-1, object.get("b").intValue(8));
   }
@@ -76,10 +76,10 @@ public class TestJson {
   /** Nested objects. */
   @Test public void testObject2() throws IOException, JsonParser.SyntaxError {
     JsonObject object = parse("{\"a\": {\"x\": true, \"y\": {\"z\":16.0}}, \"b\": []}").object();
-    assertEquals(2, object.getNumMember());
-    assertEquals(2, object.get("a").object().getNumMember());
+    assertEquals(2, object.size());
+    assertEquals(2, object.get("a").object().size());
     assertEquals(true, object.get("a").object().get("x").boolValue(false));
-    assertEquals(1, object.get("a").object().get("y").object().getNumMember());
+    assertEquals(1, object.get("a").object().get("y").object().size());
     assertEquals(16, object.get("a").object().get("y").object().get("z").doubleValue(0), 0.01);
     assertTrue(object.get("b").isArray());
   }
@@ -115,14 +115,14 @@ public class TestJson {
 
   /** Possible to parse empty arrays. */
   @Test public void testEmptyArray() throws IOException, JsonParser.SyntaxError {
-    assertEquals(0, parse("[]").array().getNumElement());
+    assertEquals(0, parse("[]").array().size());
   }
 
   /** JsonArray.getNumElement() gives the number of array elements. */
   @Test public void testArray1() throws IOException, JsonParser.SyntaxError {
-    assertEquals(2, parse("[1, 2]").array().getNumElement());
-    assertEquals(3, parse("[1, 2, 3]").array().getNumElement());
-    assertEquals(0, parse("[[]]").array().get(0).array().getNumElement());
+    assertEquals(2, parse("[1, 2]").array().size());
+    assertEquals(3, parse("[1, 2, 3]").array().size());
+    assertEquals(0, parse("[[]]").array().get(0).array().size());
   }
 
   /** JsonArray.getElement() is equivalent to JsonArray.get(). */
@@ -178,9 +178,6 @@ public class TestJson {
     JsonArray array = parse("[\"foo\", \"bart\"]").array();
     assertEquals("foo", array.get(0).stringValue(""));
     assertEquals("bart", array.get(1).stringValue(""));
-    assertEquals(-1, array.get(4).doubleValue(-1), 0.001);
-    assertEquals(false, array.get(400).boolValue(false));
-    assertEquals(true, array.get(4001).boolValue(true));
   }
 
   /** Test non-string conversions. */
@@ -193,10 +190,8 @@ public class TestJson {
 
   /** Unknown value is replaced by the given defaults. */
   @Test public void testUnknown1() throws IOException, JsonParser.SyntaxError {
-    JsonArray array = parse("[]").array();
-    assertEquals("bort", array.get(0).stringValue("bort"));
-    assertEquals(true, array.get(1).boolValue(true));
-    assertTrue(array.get(-1).isUnknown()); // Negative index -> unknown.
+    assertEquals("bort", Json.UNKNOWN.stringValue("bort"));
+    assertEquals(true, Json.UNKNOWN.boolValue(true));
   }
 
   /** Unknown is returned when accessing non-existing member. */
@@ -216,7 +211,7 @@ public class TestJson {
 
   /** Values can be surrounded by whitespace. */
   @Test public void testWhitespace() throws IOException, JsonParser.SyntaxError {
-    assertEquals(2, parse("[1,      2]").array().getNumElement());
+    assertEquals(2, parse("[1,      2]").array().size());
     assertEquals(2, parse("\t  [1, \n2, 3]\r").array().get(1).intValue(0));
     assertEquals(3, parse("\t  [1, \n2, 3]\r").array().get(2).intValue(0));
     assertEquals(3, parse("{\"x\"   \n\r\t   :3}").object().get("x").intValue(0));

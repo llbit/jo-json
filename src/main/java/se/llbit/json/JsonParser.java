@@ -105,7 +105,7 @@ public class JsonParser implements AutoCloseable {
       skipWhitespace();
       JsonValue value = parseValue();
       if (value == null) {
-        if (array.hasElement() || in.peek() == Literal.VALUE_SEPARATOR) {
+        if (!array.isEmpty() || in.peek() == Literal.VALUE_SEPARATOR) {
           throw new SyntaxError("missing element in array");
         }
         break;

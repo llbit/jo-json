@@ -63,14 +63,14 @@ public class TestParsing {
 
   @Test public void testOneMemberObject_1() throws IOException, SyntaxError {
     JsonObject object = (JsonObject) parse(" { \"a\": 0 } ");
-    assertEquals(1, object.getNumMember());
+    assertEquals(1, object.size());
     assertTrue(object.getMember(0) != null);
     assertTrue(object.getMember(0).getValue() instanceof JsonNumber);
   }
 
   @Test public void testNestedObjectArray_1() throws IOException, SyntaxError {
     JsonObject object = (JsonObject) parse(" { \"a\": [ 0, 1, 2 ] } ");
-    assertEquals(1, object.getNumMember());
+    assertEquals(1, object.size());
     assertTrue(object.getMember(0) != null);
     testArray(object.getMember(0).getValue(), JsonNumber.class, JsonNumber.class, JsonNumber.class);
   }
@@ -237,7 +237,7 @@ public class TestParsing {
   private static void testArray(JsonValue value, Class<?>... elementTypes) {
     assertTrue(value instanceof JsonArray);
     JsonArray array = (JsonArray) value;
-    assertEquals(elementTypes.length, array.getNumElement());
+    assertEquals(elementTypes.length, array.size());
     for (int i = 0; i < elementTypes.length; ++i) {
       assertEquals(elementTypes[i], array.get(i).getClass());
     }
