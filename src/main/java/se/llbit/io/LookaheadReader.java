@@ -63,18 +63,11 @@ public class LookaheadReader extends FilterReader {
     this(new InputStreamReader(in), lookahead);
   }
 
-  /**
-   * Skip some input.
-   *
-   * @param num Number of characters to skip forward
-   */
-  public void consume(int num) {
-    pos += num;
-  }
-
   @Override public long skip(long num) throws IOException {
-    consume((int) num);
-    return num;
+    refill();
+    long actual = Math.min(num, length - pos);
+    pos += actual;
+    return actual;
   }
 
   /**
@@ -143,21 +136,20 @@ public class LookaheadReader extends FilterReader {
     return pop();
   }
 
-  @Override public int read(char cbuf[], int off, int len) throws IOException {
+  @Override public int read(char cbuf[], int offset, int len) throws IOException {
     if (!ready()) {
       return -1;
     }
-    len += off;
 
-    for (int i = off; i < len; i++) {
+    for (int i = 0; i < len; i++) {
       int c = read();
       if (c < 0) {
-        return i - off;
+        return i;
       } else {
-        cbuf[i] = (char) c;
+        cbuf[offset + i] = (char) c;
       }
     }
-    return len - off;
+    return len;
   }
 
   @Override public boolean ready() throws IOException {
