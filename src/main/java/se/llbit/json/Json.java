@@ -57,6 +57,10 @@ public final class Json {
     @Override public boolean asBoolean(boolean undefined) {
       return true;
     }
+
+    @Override public JsonLiteral copy() {
+      return this;
+    }
   };
 
   /** The JSON False literal. */
@@ -80,6 +84,10 @@ public final class Json {
     @Override public boolean asBoolean(boolean undefined) {
       return false;
     }
+
+    @Override public JsonLiteral copy() {
+      return this;
+    }
   };
 
   /** The JSON Unknown literal. */
@@ -99,6 +107,10 @@ public final class Json {
     @Override public boolean isUnknown() {
       return true;
     }
+
+    @Override public JsonValue copy() {
+      return this;
+    }
   };
 
   /** The JSON Null literal. */
@@ -113,6 +125,10 @@ public final class Json {
 
     @Override public String toString() {
       return "null";
+    }
+
+    @Override public JsonLiteral copy() {
+      return this;
     }
   };
 

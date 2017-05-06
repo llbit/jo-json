@@ -1,4 +1,4 @@
-/* Copyright (c) 2013-2017, Jesper Öqvist
+/* Copyright (c) 2017, Jesper Öqvist
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,41 +29,42 @@
  */
 package se.llbit.json;
 
-/** Represents a member of a JSON object. */
-public class JsonMember implements PrettyPrintable {
-  public final String name;
-  public final JsonValue value;
+import org.junit.Test;
 
-  public JsonMember(String name, JsonValue value) {
-    this.name = name;
-    this.value = value;
+import static org.junit.Assert.assertEquals;
+
+public class TestCopy {
+  /** Modifications to a copy do not affect the original, and vice versa. */
+  @Test public void testIndependentArrayCopy() {
+    JsonArray original = new JsonArray();
+    original.addAll(
+        Json.of(1), Json.of(2), Json.of("hi"),
+        Json.NULL, Json.UNKNOWN);
+
+    JsonArray copy = original.copy();
+
+    copy.add(Json.NULL);
+    assertEquals(5, original.size()); // Adding to the copy did not affect the original.
+
+    original.remove(0);
+    assertEquals(6, copy.size()); // Removing from the original did not affect the copy.
   }
 
-  public void prettyPrint(PrettyPrinter out) {
-    out.print("\"");
-    out.print(getName());
-    out.print("\": ");
-    out.print(getValue());
-  }
 
-  public String toCompactString() {
-    return "\"" + JsonString.escape(getName()) + "\":" + getValue().toCompactString();
-  }
+  /** Modifications to a copy do not affect the original, and vice versa. */
+  @Test public void testIndependentObjectCopy() {
+    JsonObject original = new JsonObject();
+    original.addAll(
+        new JsonMember("1", Json.of(1)),
+        new JsonMember("1", Json.of(true)),
+        new JsonMember("1", Json.of(false)));
 
-  @Override public String toString() {
-    return "\"" + getName() + "\" : " + getValue().toString();
-  }
+    JsonObject copy = original.copy();
 
-  public String getName() {
-    return name;
-  }
+    copy.add(new JsonMember("2", Json.of(2)));
+    assertEquals(3, original.size()); // Adding to the copy did not affect the original.
 
-  public JsonValue getValue() {
-    return value;
-  }
-
-  /** Create an independent copy of this JSON member. */
-  public JsonMember copy() {
-    return new JsonMember(name, value.copy());
+    original.remove(0);
+    assertEquals(4, copy.size()); // Removing from the original did not affect the copy.
   }
 }

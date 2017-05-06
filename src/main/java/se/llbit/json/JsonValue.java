@@ -44,10 +44,12 @@ public abstract class JsonValue implements PrettyPrintable {
     return false;
   }
 
+  /** Test if this JSON value is a JSON object. */
   public boolean isObject() {
     return false;
   }
 
+  /** Test if this JSON value is a JSON array. */
   public boolean isArray() {
     return false;
   }
@@ -175,4 +177,12 @@ public abstract class JsonValue implements PrettyPrintable {
   public boolean asBoolean(boolean undefined) {
     return undefined;
   }
+
+  /**
+   * Creates an independent copy of this JSON value.
+   *
+   * <p>If this JSON value is immutable, then this object is returned.
+   * Otherwise, a fresh object containing the same data is created and returned.
+   */
+  public abstract JsonValue copy();
 }

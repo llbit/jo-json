@@ -34,10 +34,22 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Represents a JSON array. Elements are stored in a list.
+ * Represents a JSON array.
+ *
+ * <p>Elements are stored in a mutable list.
  */
 public class JsonArray extends JsonValue implements Iterable<JsonValue> {
-  List<JsonValue> elements = new ArrayList<JsonValue>();
+  public final List<JsonValue> elements;
+
+  /** Create an array with default initial capacity. */
+  public JsonArray() {
+    elements = new ArrayList<>();
+  }
+
+  /** Create an array with the specified initial capacity. */
+  public JsonArray(int initialCapacity) {
+    elements = new ArrayList<>(initialCapacity);
+  }
 
   public void prettyPrint(PrettyPrinter out) {
     if (!isEmpty()) {
@@ -71,6 +83,15 @@ public class JsonArray extends JsonValue implements Iterable<JsonValue> {
       throw new NullPointerException();
     }
     elements.add(value);
+  }
+
+  public void addAll(JsonValue... values) {
+    if (values == null) {
+      throw new NullPointerException();
+    }
+    for (JsonValue value : values) {
+      add(value);
+    }
   }
 
   /**
@@ -108,6 +129,16 @@ public class JsonArray extends JsonValue implements Iterable<JsonValue> {
    */
   public JsonValue get(int index) {
     return elements.get(index);
+  }
+
+  /**
+   * Remove the element at index {@code i}.
+   *
+   * @return the removed element.
+   * @throws IndexOutOfBoundsException if the given index is not valid.
+   */
+  public JsonValue remove(int i) {
+    return elements.remove(i);
   }
 
   public String toCompactString() {
@@ -168,6 +199,15 @@ public class JsonArray extends JsonValue implements Iterable<JsonValue> {
   @Override public JsonArray asArray() {
     return this;
   }
+
+  @Override public JsonArray copy() {
+    JsonArray copy = new JsonArray(elements.size());
+    for (JsonValue element : elements) {
+      copy.add(element.copy());
+    }
+    return copy;
+  }
+
   public boolean isEmpty() {
     return elements.isEmpty();
   }

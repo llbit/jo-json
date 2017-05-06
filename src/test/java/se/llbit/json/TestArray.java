@@ -151,4 +151,67 @@ public class TestArray {
     array.add("y");
     array.get(-1);
   }
+
+  @Test public void testAddAll() {
+    JsonArray array = new JsonArray();
+    array.addAll(Json.of(10), Json.of(20));
+    assertEquals(2, array.size());
+    assertEquals(10, array.get(0).asInt(0));
+    assertEquals(20, array.get(1).asInt(0));
+  }
+
+  /** It is okay to pass zero arguments to addAll. */
+  @Test public void testAddAll2() {
+    JsonArray array = new JsonArray();
+    array.addAll();
+    assertTrue(array.isEmpty());
+  }
+
+  /** Can't pass null to addAll. */
+  @Test(expected = NullPointerException.class)
+  public void testAddAllErr1() {
+    JsonArray array = new JsonArray();
+    array.addAll((JsonValue[]) null);
+  }
+
+  /** Can't pass null to addAll. */
+  @Test(expected = NullPointerException.class)
+  public void testAddAllErr2() {
+    JsonArray array = new JsonArray();
+    array.addAll((JsonValue) null);
+  }
+
+  /** Elements can be removed by index. */
+  @Test public void testRemove1() {
+    JsonArray array = new JsonArray();
+    array.add(Json.of("!!"));
+    array.add(Json.of("x"));
+    array.add(Json.of("y"));
+
+    assertEquals(3, array.size());
+    assertEquals("x", array.get(1).stringValue(""));
+
+    array.remove(1);
+    assertEquals(2, array.size());
+    assertEquals("y", array.get(1).stringValue(""));
+  }
+
+  /** The value returned by {@code remove(int)} is the removed member. */
+  @Test public void testRemove2() {
+    JsonArray array = new JsonArray();
+    array.add(Json.of("!!!"));
+    assertEquals("!!!", array.remove(0).asString(""));
+  }
+
+  @Test(expected = IndexOutOfBoundsException.class)
+  public void testRemoveErr1() {
+    JsonArray array = new JsonArray();
+    array.remove(1);
+  }
+
+  @Test(expected = IndexOutOfBoundsException.class)
+  public void testRemoveErr2() {
+    JsonArray array = new JsonArray();
+    array.remove(-2);
+  }
 }

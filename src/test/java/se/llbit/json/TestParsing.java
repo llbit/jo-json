@@ -64,15 +64,15 @@ public class TestParsing {
   @Test public void testOneMemberObject_1() throws IOException, SyntaxError {
     JsonObject object = (JsonObject) parse(" { \"a\": 0 } ");
     assertEquals(1, object.size());
-    assertTrue(object.getMember(0) != null);
-    assertTrue(object.getMember(0).getValue() instanceof JsonNumber);
+    assertTrue(object.get(0) != null);
+    assertTrue(object.get(0).getValue() instanceof JsonNumber);
   }
 
   @Test public void testNestedObjectArray_1() throws IOException, SyntaxError {
     JsonObject object = (JsonObject) parse(" { \"a\": [ 0, 1, 2 ] } ");
     assertEquals(1, object.size());
-    assertTrue(object.getMember(0) != null);
-    testArray(object.getMember(0).getValue(), JsonNumber.class, JsonNumber.class, JsonNumber.class);
+    assertTrue(object.get(0) != null);
+    testArray(object.get(0).getValue(), JsonNumber.class, JsonNumber.class, JsonNumber.class);
   }
 
   @Test public void testEmptyArray() throws IOException, SyntaxError {

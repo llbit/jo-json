@@ -88,4 +88,8 @@ public class JsonNumber extends JsonValue {
   @Override public double asDouble(double undefined) {
     return Double.valueOf(value);
   }
+
+  @Override public JsonNumber copy() {
+    return this;
+  }
 }

@@ -41,7 +41,17 @@ import java.util.Map;
  * <p>Members are stored in a list.
  */
 public class JsonObject extends JsonValue implements Iterable<JsonMember> {
-  private final List<JsonMember> members = new ArrayList<>();
+  public final List<JsonMember> members;
+
+  /** Create an object with default initial capacity. */
+  public JsonObject() {
+    members = new ArrayList<>();
+  }
+
+  /** Create an object with the specified initial capacity. */
+  public JsonObject(int initialCapacity) {
+    members = new ArrayList<>(initialCapacity);
+  }
 
   public void prettyPrint(PrettyPrinter out) {
     if (!isEmpty()) {
@@ -71,12 +81,21 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
    */
   public void set(String name, JsonValue value) {
     for (int i = 0; i < size(); ++i) {
-      if (getMember(i).getName().equals(name)) {
+      if (get(i).getName().equals(name)) {
         members.set(i, new JsonMember(name, value));
         return;
       }
     }
     add(name, value);
+  }
+
+  /**
+   * Change the value of the member at index {@code i}.
+   *
+   * @throws IndexOutOfBoundsException if the index is not valid.
+   */
+  public void set(int i, JsonValue value) {
+    members.set(i, new JsonMember(members.get(i).name, value));
   }
 
   /**
@@ -150,7 +169,7 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
    * @param i index of the member to return.
    * @throws IndexOutOfBoundsException if the given index is not valid.
    */
-  public JsonMember getMember(int i) {
+  public JsonMember get(int i) {
     return members.get(i);
   }
 
@@ -159,18 +178,47 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
    * forward.
    *
    * @param i index of the member to delete.
+   * @return the removed member.
    * @throws IndexOutOfBoundsException if the given index is not valid.
    */
-  public JsonMember removeMember(int i) {
+  public JsonMember remove(int i) {
     return members.remove(i);
   }
+
+  /**
+   * Remove the first member with the given name.
+   *
+   * @param name the name of the member to remove.
+   * @return the removed member, or {@code null} if none was removed.
+   */
+  public JsonMember remove(String name) {
+    for (int i = 0; i < members.size(); ++i) {
+      if (members.get(i).name.equals(name)) {
+        return members.remove(i);
+      }
+    }
+    return null;
+  }
+
   /**
    * Append an element to the Member list.
    *
-   * @param node The element to append to the Member list.
+   * @param member The element to append to the Member list.
    */
-  public void add(JsonMember node) {
-    members.add(node);
+  public void add(JsonMember member) {
+    if (member == null) {
+      throw new NullPointerException();
+    }
+    members.add(member);
+  }
+
+  public void addAll(JsonMember... all) {
+    if (all == null) {
+      throw new NullPointerException();
+    }
+    for (JsonMember member : all) {
+      add(member);
+    }
   }
 
   /**
@@ -179,19 +227,21 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
   public Map<String, JsonValue> toMap() {
     Map<String, JsonValue> map = new HashMap<>();
     for (JsonMember member : members) {
-      if (!map.containsKey(member.getName())) {
+      if (!map.containsKey(member.name)) {
         // Only the first occurrence of a member is mapped.
-        map.put(member.getName(), member.getValue());
+        map.put(member.name, member.value);
       }
     }
     return map;
   }
 
   /**
-   * Retrieves the value of a member in this JSON object.
+   * Find the value of the first member with the given name in this object.
+   * If no such member exists, the JSON unknown literal is returned.
    *
    * @param name the name to search for
-   * @return the JSON member value for the first member with the given name
+   * @return the JSON member value for the first member with the given name,
+   * or the unknown JSON literal if no member has the given name.
    */
   public JsonValue get(String name) {
     for (JsonMember member : members) {
@@ -212,6 +262,14 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
 
   @Override public JsonObject asObject() {
     return this;
+  }
+
+  @Override public JsonObject copy() {
+    JsonObject copy = new JsonObject(members.size());
+    for (JsonMember member : members) {
+      copy.add(member.copy());
+    }
+    return copy;
   }
 
   public boolean isEmpty() {

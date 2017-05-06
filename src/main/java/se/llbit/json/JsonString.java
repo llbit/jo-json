@@ -59,6 +59,10 @@ public class JsonString extends JsonValue {
     return value;
   }
 
+  @Override public JsonString copy() {
+    return this;
+  }
+
   public String escaped() {
     return escape(value);
   }
