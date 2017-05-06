@@ -1,3 +1,26 @@
+1.3.0 - TBD
+    * Full test coverage.
+		* Fixed LookaheadReader.skip(int) and LookaheadReader.read(char[],int,int)
+      not working according to the specification.
+    * API changes:
+        * Removed LookaheadReader.consume(int) - use skip(int) instead.
+				* Removed JsonArray.addElement().
+				* Removed JsonArray.setElement().
+				* Removed JsonArray.getElements().
+				* Renamed JsonObject.addMember() to JsonObject.add().
+				* Removed JsonObject.hasMember(String).
+				* Removed JsonObject.getMembers().
+				* Added Json.of(X) methods to convert primitive types and String to the
+          wrapped JSON equivalents.
+        * Added asInt(int), asLong(long), asFloat(float), asDouble(double),
+					asString(String), and asBoolean(boolean) to JsonValue.
+				* Added JsonValue.asArray() and JsonValue.asObject() as aliases of
+          JsonValue.array() and JsonValue.object().
+				* JsonObject.add(String, JsonValue) now throws a NullPointerException when
+					the value is null.
+				* JsonArray.add(JsonValue) now throws a NullPointerException when
+					the value is null.
+
 1.2.0 - 2017-04-29
     * Removed JastAdd code generation, converted everything to static Java.
     * Multiple API changes.

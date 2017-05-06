@@ -5,7 +5,7 @@ apply plugin: 'jacoco'
 
 project.version = '1.2.0'
 project.group = 'se.llbit'
-project.archivesBaseName = 'sljson'
+project.archivesBaseName = 'jo-json'
 
 // Source level is JDK 7 because we use AutoCloseable.
 sourceCompatibility = '1.7'
@@ -67,10 +67,10 @@ uploadArchives {
 		}
 
 		pom.project {
-			name 'sljson'
+			name 'jo-json'
 			packaging 'jar'
 			description 'A small JSON library.'
-			url 'https://github.com/llbit/json'
+			url 'https://github.com/llbit/jo-json'
 			licenses {
 				license {
 					name 'Modified BSD License'
@@ -85,8 +85,8 @@ uploadArchives {
 				}
 			}
 			scm {
-				connection 'scm:git:https://github.com/llbit/json.git'
-				url 'https://github.com/llbit/json'
+				connection 'scm:git:https://github.com/llbit/jo-json.git'
+				url 'https://github.com/llbit/jo-json'
 			}
 		}
 	}
