@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, Jesper Öqvist
+/* Copyright (c) 2013-2017, Jesper Öqvist
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,9 +35,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-/**
- * @author Jesper Öqvist <jesper@llbit.se>
- */
 public class LookaheadReader extends FilterReader {
 
   /** Maximum read buffer size. */

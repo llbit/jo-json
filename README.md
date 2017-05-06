@@ -11,3 +11,6 @@ library, however I converted it to a static Java project to get rid of some of
 the JastAdd overhead (parent pointers, child vector, attribute visit flags).
 
 Copyright (c) 2013-2017, Jesper Öqvist
+
+This project is provided under the Modified BSD License.
+See the LICENSE file, in the same directory as this README file.

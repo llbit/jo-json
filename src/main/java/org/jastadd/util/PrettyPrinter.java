@@ -33,9 +33,6 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Stack;
 
-/**
- * @author Jesper Öqvist <jesper.oqvist@cs.lth.se>
- */
 public class PrettyPrinter {
   private final String indentation;
   private final java.util.List<String> ind = new ArrayList<String>(32);
