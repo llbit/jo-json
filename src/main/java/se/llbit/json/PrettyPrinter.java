@@ -29,21 +29,23 @@
  */
 package se.llbit.json;
 
-import org.jastadd.util.PrettyPrintable;
-
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Stack;
 
+/**
+ * JSON output serializer.
+ * The output is not minified.
+ */
 public class PrettyPrinter implements AutoCloseable {
   private final String indentation;
-  private final java.util.List<String> ind = new ArrayList<String>(32);
+  private final java.util.List<String> ind = new ArrayList<>(32);
 
   {
     ind.add("");
   }
 
-  private final Stack<Integer> indentStack = new Stack<Integer>();
+  private final Stack<Integer> indentStack = new Stack<>();
 
   {
     indentStack.push(0);
@@ -63,8 +65,7 @@ public class PrettyPrinter implements AutoCloseable {
   }
 
   /**
-   * @param level The level of indentation
-   * @return The indentation string for the given indentation level
+   * Compute indentation string for the given indentation level.
    */
   public String getIndentation(int level) {
     while (ind.size() < (level + 1)) {
@@ -73,15 +74,11 @@ public class PrettyPrinter implements AutoCloseable {
     return ind.get(level);
   }
 
-
   public void print(String str) {
     indentNewline();
     out.print(str);
   }
 
-  /**
-   *
-   */
   public void println() {
     out.println();
     newline = true;

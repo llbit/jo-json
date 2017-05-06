@@ -29,8 +29,6 @@
  */
 package se.llbit.json;
 
-import org.jastadd.util.PrettyPrintable;
-
 /** Represents a member of a JSON object. */
 public class JsonMember implements PrettyPrintable {
   public final String name;

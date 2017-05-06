@@ -27,9 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.jastadd.util;
-
-import se.llbit.json.PrettyPrinter;
+package se.llbit.json;
 
 public interface PrettyPrintable {
   void prettyPrint(PrettyPrinter prettyPrinter);

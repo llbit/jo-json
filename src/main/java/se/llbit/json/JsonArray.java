@@ -29,8 +29,6 @@
  */
 package se.llbit.json;
 
-import org.jastadd.util.PrettyPrintable;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
