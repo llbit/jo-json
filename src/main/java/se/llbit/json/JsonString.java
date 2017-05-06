@@ -33,7 +33,7 @@ import org.jastadd.util.PrettyPrinter;
 
 /** Stores a JSON string literal. */
 public class JsonString extends JsonValue {
-  private final String value;
+  public final String value;
 
   public JsonString(String value) {
     this.value = value;
@@ -50,18 +50,14 @@ public class JsonString extends JsonValue {
   }
 
   @Override public String toString() {
-    return "\"" + getValue() + "\"";
+    return "\"" + value + "\"";
   }
 
-  public String getValue() {
+  @Override public String stringValue(String undefined) {
     return value;
   }
 
-  /**
-   * @param undefined value returned if this is not a JSON string.
-   * @return the JSON string value
-   */
-  public String stringValue(String undefined) {
+  @Override public String asString(String undefined) {
     return value;
   }
 

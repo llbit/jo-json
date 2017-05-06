@@ -136,7 +136,7 @@ public class JsonParser implements AutoCloseable {
       case '+':
         return parseNumber();
       case Literal.QUOTE_MARK:
-        return parseString();
+        return new JsonString(parseString());
       case 't':
         acceptLiteral(Literal.TRUE);
         return Json.TRUE;
@@ -152,7 +152,7 @@ public class JsonParser implements AutoCloseable {
     }
   }
 
-  private JsonString parseString() throws IOException, SyntaxError {
+  private String parseString() throws IOException, SyntaxError {
     accept(Literal.QUOTE_MARK);
     StringBuilder sb = new StringBuilder();
     while (true) {
@@ -167,7 +167,7 @@ public class JsonParser implements AutoCloseable {
         sb.append((char) next);
       }
     }
-    return new JsonString(sb.toString());
+    return sb.toString();
   }
 
   private char unescapeStringChar() throws IOException, SyntaxError {
@@ -301,7 +301,7 @@ public class JsonParser implements AutoCloseable {
 
   private JsonMember parseMember() throws IOException, SyntaxError {
     if (in.peek() == Literal.QUOTE_MARK) {
-      JsonString name = parseString();
+      String name = parseString();
       skipWhitespace();
       accept(Literal.NAME_SEPARATOR);
       skipWhitespace();
@@ -309,7 +309,7 @@ public class JsonParser implements AutoCloseable {
       if (value == null) {
         throw new SyntaxError("missing value for object member");
       }
-      return new JsonMember(name.getValue(), value);
+      return new JsonMember(name, value);
     }
     return null;
   }

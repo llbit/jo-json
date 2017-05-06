@@ -33,7 +33,7 @@ import org.jastadd.util.PrettyPrinter;
 
 /** Stores a JSON number as a string. */
 public class JsonNumber extends JsonValue {
-  final String value;
+  public final String value;
 
   public JsonNumber(long value) {
     this.value = Long.toString(value);
@@ -59,44 +59,35 @@ public class JsonNumber extends JsonValue {
     return value;
   }
 
-  /**
-   * Retrieves the value for the lexeme Value.
-   *
-   * @return The value for the lexeme Value.
-   */
-  public String getValue() {
-    return value;
+  @Override public int intValue(int undefined) {
+    return Integer.valueOf(value);
   }
 
-  /**
-   * @param undefined value returned if this is not a JSON number.
-   * @return the JSON number value
-   */
-  public int intValue(int undefined) {
-    return Integer.valueOf(getValue());
+  @Override public int asInt(int undefined) {
+    return Integer.valueOf(value);
   }
 
-  /**
-   * @param undefined value returned if this is not a JSON number.
-   * @return the JSON number value
-   */
-  public long longValue(long undefined) {
-    return Long.valueOf(getValue());
+  @Override public long longValue(long undefined) {
+    return Long.valueOf(value);
   }
 
-  /**
-   * @param undefined value returned if this is not a JSON number.
-   * @return the JSON number value
-   */
-  public float floatValue(float undefined) {
-    return Float.valueOf(getValue());
+  @Override public long asLong(long undefined) {
+    return Long.valueOf(value);
   }
 
-  /**
-   * @param undefined value returned if this is not a JSON number.
-   * @return the JSON number value
-   */
-  public double doubleValue(double undefined) {
-    return Double.valueOf(getValue());
+  @Override public float floatValue(float undefined) {
+    return Float.valueOf(value);
+  }
+
+  @Override public float asFloat(float undefined) {
+    return Float.valueOf(value);
+  }
+
+  @Override public double doubleValue(double undefined) {
+    return Double.valueOf(value);
+  }
+
+  @Override public double asDouble(double undefined) {
+    return Double.valueOf(value);
   }
 }

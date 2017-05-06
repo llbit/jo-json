@@ -236,4 +236,8 @@ public class JsonObject extends JsonValue {
   public JsonObject object() {
     return this;
   }
+
+  public boolean isEmpty() {
+    return !hasMember();
+  }
 }

@@ -49,6 +49,10 @@ public interface Json {
     @Override public boolean boolValue(boolean undefined) {
       return true;
     }
+
+    @Override public boolean asBoolean(boolean undefined) {
+      return true;
+    }
   };
 
   /** The JSON False literal. */
@@ -68,16 +72,24 @@ public interface Json {
     @Override public boolean boolValue(boolean undefined) {
       return false;
     }
+
+    @Override public boolean asBoolean(boolean undefined) {
+      return false;
+    }
   };
 
   /** The JSON Unknown literal. */
   JsonValue UNKNOWN = new JsonValue() {
     @Override public void prettyPrint(PrettyPrinter out) {
-      out.print("<unknown>");
+      out.print("\"<unknown>\"");
     }
 
     @Override public String toCompactString() {
-      return "\"<unknown value>\"";
+      return "\"<unknown>\"";
+    }
+
+    @Override public String toString() {
+      return "\"<unknown>\"";
     }
 
     @Override public boolean isUnknown() {

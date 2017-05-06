@@ -34,8 +34,8 @@ import org.jastadd.util.PrettyPrinter;
 
 /** Represents a member of a JSON object. */
 public class JsonMember implements PrettyPrintable {
-  private final String name;
-  private final JsonValue value;
+  public final String name;
+  public final JsonValue value;
 
   public JsonMember(String name, JsonValue value) {
     this.name = name;

@@ -186,4 +186,8 @@ public class JsonArray extends JsonValue {
   public JsonArray array() {
     return this;
   }
+
+  public boolean isEmpty() {
+    return !hasElement();
+  }
 }

@@ -87,8 +87,8 @@ public class TestParsing {
     JsonParser parser = new JsonParser(in);
     JsonArray array = (JsonArray) parser.parse();
     assertTrue(array.getElement(0) instanceof JsonString);
-    JsonString value = (JsonString) array.getElement(0);
-    assertEquals("hello", value.getValue());
+    JsonString string = (JsonString) array.getElement(0);
+    assertEquals("hello", string.value);
   }
 
   @Test public void testNumber_1() throws IOException, SyntaxError {
@@ -97,8 +97,8 @@ public class TestParsing {
     JsonParser parser = new JsonParser(in);
     JsonArray array = (JsonArray) parser.parse();
     assertTrue(array.getElement(0) instanceof JsonNumber);
-    JsonNumber value = (JsonNumber) array.getElement(0);
-    assertEquals("0", value.getValue());
+    JsonNumber number = (JsonNumber) array.getElement(0);
+    assertEquals("0", number.value);
   }
 
   @Test public void testNumber_2() throws IOException, SyntaxError {
@@ -107,8 +107,8 @@ public class TestParsing {
     JsonParser parser = new JsonParser(in);
     JsonArray array = (JsonArray) parser.parse();
     assertTrue(array.getElement(0) instanceof JsonNumber);
-    JsonNumber value = (JsonNumber) array.getElement(0);
-    assertEquals("-13", value.getValue());
+    JsonNumber number = (JsonNumber) array.getElement(0);
+    assertEquals("-13", number.value);
   }
 
   @Test public void testTrue() throws IOException, SyntaxError {

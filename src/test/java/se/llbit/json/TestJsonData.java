@@ -48,10 +48,10 @@ public class TestJsonData {
   }
 
   /**
-   * <p>Reads an entire file to a string object.
-   * <p/>
+   * Reads an entire file to a string object.
+   *
    * <p>If the file does not exist an empty string is returned.
-   * <p/>
+   *
    * <p>The system dependent line separator char sequence is replaced by
    * the newline character.
    */

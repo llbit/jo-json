@@ -62,27 +62,99 @@ public abstract class JsonValue implements PrettyPrintable {
     return new JsonArray();
   }
 
+  /**
+   * The String value of this JSON string.
+   * @param undefined value returned if this is not a JSON string.
+   */
   public String stringValue(String undefined) {
     return undefined;
   }
 
+  /**
+   * The String value of this JSON string.
+   * @param undefined value returned if this is not a JSON string.
+   */
+  public String asString(String undefined) {
+    return undefined;
+  }
+
+  /**
+   * The {@code int}-converted value of this JSON number.
+   * @param undefined value returned if this is not a JSON number.
+   */
   public int intValue(int undefined) {
     return undefined;
   }
 
+  /**
+   * The {@code int}-converted value of this JSON number.
+   * @param undefined value returned if this is not a JSON number.
+   */
+  public int asInt(int undefined) {
+    return undefined;
+  }
+
+  /**
+   * The {@code long}-converted value of this JSON number.
+   * @param undefined value returned if this is not a JSON number.
+   */
   public long longValue(long undefined) {
     return undefined;
   }
 
+  /**
+   * The {@code long}-converted value of this JSON number.
+   * @param undefined value returned if this is not a JSON number.
+   */
+  public long asLong(long undefined) {
+    return undefined;
+  }
+
+  /**
+   * The {@code float}-converted value of this JSON number.
+   * @param undefined value returned if this is not a JSON number.
+   */
   public float floatValue(float undefined) {
     return undefined;
   }
 
+  /**
+   * The {@code float}-converted value of this JSON number.
+   * @param undefined value returned if this is not a JSON number.
+   */
+  public float asFloat(float undefined) {
+    return undefined;
+  }
+
+  /**
+   * The {@code double}-converted value of this JSON number.
+   * @param undefined value returned if this is not a JSON number.
+   */
   public double doubleValue(double undefined) {
     return undefined;
   }
 
+  /**
+   * The {@code double}-converted value of this JSON number.
+   * @param undefined value returned if this is not a JSON number.
+   */
+  public double asDouble(double undefined) {
+    return undefined;
+  }
+
+  /**
+   * The {@code boolean} value of this JSON boolean.
+   * @param undefined value returned if this is not a JSON boolean.
+   */
   public boolean boolValue(boolean undefined) {
+    return undefined;
+  }
+
+  /**
+   * The {@code boolean} value of this JSON boolean.
+   * @param undefined value returned if this is not a JSON boolean.
+   */
+  public boolean asBoolean(boolean undefined) {
     return undefined;
   }
 }

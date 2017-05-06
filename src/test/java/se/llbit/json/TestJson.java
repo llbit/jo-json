@@ -323,20 +323,6 @@ public class TestJson {
     parse(" \t\n\r   \t\n");
   }
 
-  @Test public void testToCompactString() {
-    JsonArray array = new JsonArray();
-    array.add("!");
-    array.add(711);
-    JsonObject object = new JsonObject();
-    object.add(" ab cd", 123);
-    object.add("@", "''''");
-    object.add("\"\"", "\n\r");
-    object.add(".", array);
-
-    assertEquals("{\" ab cd\":123,\"@\":\"''''\",\"\\\"\\\"\":\"\\n\\r\",\".\":[\"!\",711]}",
-        object.toCompactString());
-  }
-
   @Test public void testToMap() {
     JsonArray array = new JsonArray();
     array.add("!");
