@@ -29,8 +29,6 @@
  */
 package se.llbit.json;
 
-import org.jastadd.util.PrettyPrinter;
-
 public final class Json {
   private Json() { }
 

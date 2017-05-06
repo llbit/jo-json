@@ -30,7 +30,6 @@
 package se.llbit.json;
 
 import org.jastadd.util.PrettyPrintable;
-import org.jastadd.util.PrettyPrinter;
 
 import java.util.ArrayList;
 import java.util.HashMap;

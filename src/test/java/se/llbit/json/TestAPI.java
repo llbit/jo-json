@@ -31,6 +31,9 @@ package se.llbit.json;
 
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -93,5 +96,18 @@ public class TestAPI {
     assertEquals("123", Json.of(true).asString("123"));
     assertEquals(true, Json.of("bort").asBoolean(true));
     assertEquals(false, Json.of(123).asBoolean(false));
+  }
+
+  @Test public void testStringEscape() {
+    assertEquals("abc\\ndef", JsonString.escape("abc\ndef"));
+  }
+
+  @Test public void printUnknown() throws Exception {
+    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(stream);
+    try (PrettyPrinter printer = new PrettyPrinter("", printStream)) {
+      printer.print(Json.UNKNOWN);
+    }
+    assertEquals("\"<unknown>\"", stream.toString());
   }
 }

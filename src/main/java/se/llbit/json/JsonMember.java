@@ -30,7 +30,6 @@
 package se.llbit.json;
 
 import org.jastadd.util.PrettyPrintable;
-import org.jastadd.util.PrettyPrinter;
 
 /** Represents a member of a JSON object. */
 public class JsonMember implements PrettyPrintable {

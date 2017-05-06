@@ -29,8 +29,6 @@
  */
 package se.llbit.json;
 
-import org.jastadd.util.PrettyPrinter;
-
 /** Stores a JSON string literal. */
 public class JsonString extends JsonValue {
   public final String value;

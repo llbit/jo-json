@@ -29,6 +29,8 @@
  */
 package org.jastadd.util;
 
+import se.llbit.json.PrettyPrinter;
+
 public interface PrettyPrintable {
   void prettyPrint(PrettyPrinter prettyPrinter);
 }

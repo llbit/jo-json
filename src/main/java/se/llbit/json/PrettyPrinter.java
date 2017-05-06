@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, Jesper Öqvist
+/* Copyright (c) 2013-2017, Jesper Öqvist
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,13 +27,15 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package org.jastadd.util;
+package se.llbit.json;
+
+import org.jastadd.util.PrettyPrintable;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public class PrettyPrinter {
+public class PrettyPrinter implements AutoCloseable {
   private final String indentation;
   private final java.util.List<String> ind = new ArrayList<String>(32);
 
@@ -97,10 +99,6 @@ public class PrettyPrinter {
     out.print(getIndentation(level));
   }
 
-  public void setIndent(int level) {
-    currentIndent = level;
-  }
-
   private void pushIndentation() {
     indentStack.push(currentIndent + indentStack.peek());
     currentIndent = 0;
@@ -116,5 +114,9 @@ public class PrettyPrinter {
       out.print(getIndentation(indentStack.peek()));
       newline = false;
     }
+  }
+
+  @Override public void close() throws Exception {
+    out.close();
   }
 }
