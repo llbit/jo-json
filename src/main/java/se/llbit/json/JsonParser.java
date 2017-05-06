@@ -38,6 +38,7 @@ import java.io.InputStream;
  * Parses JSON input.
  */
 public class JsonParser implements AutoCloseable {
+  private static final int EOF = -1;
 
   interface Literal {
     char BEGIN_OBJECT = '{';
@@ -90,7 +91,7 @@ public class JsonParser implements AutoCloseable {
         throw new SyntaxError("expected JSON object or array");
     }
     skipWhitespace();
-    if (in.peek() != -1) {
+    if (in.peek() != EOF) {
       throw new SyntaxError(
           String.format("garbage at end of input (unexpected '%c')", (char) in.peek()));
     }
@@ -109,7 +110,7 @@ public class JsonParser implements AutoCloseable {
         }
         break;
       }
-      array.addElement(value);
+      array.add(value);
       skipWhitespace();
     } while (skip(Literal.VALUE_SEPARATOR));
     accept(Literal.END_ARRAY);
@@ -157,8 +158,8 @@ public class JsonParser implements AutoCloseable {
     StringBuilder sb = new StringBuilder();
     while (true) {
       int next = in.pop();
-      if (next == -1) {
-        throw new SyntaxError("EOF while parsing JSON string (expected '\"')");
+      if (next == EOF) {
+        throw new SyntaxError("end of input while parsing JSON string (expected '\"')");
       } else if (next == Literal.ESCAPE) {
         sb.append(unescapeStringChar());
       } else if (next == Literal.QUOTE_MARK) {
@@ -174,9 +175,11 @@ public class JsonParser implements AutoCloseable {
     int next = in.pop();
     switch (next) {
       case Literal.QUOTE_MARK:
+        return Literal.QUOTE_MARK;
       case Literal.ESCAPE:
+        return Literal.ESCAPE;
       case '/':
-        return (char) next;
+        return '/';
       case 'b':
         return '\b';
       case 'f':
@@ -190,10 +193,12 @@ public class JsonParser implements AutoCloseable {
       case 'u':
         int[] u = {hexDigit(), hexDigit(), hexDigit(), hexDigit()};
         return (char) ((u[0] << 12) | (u[1] << 8) | (u[2] << 4) | u[3]);
-      case -1:
-        throw new SyntaxError("end of input while parsing JSON string");
+      case EOF:
+        throw new SyntaxError("end of input in JSON string escape sequence.");
       default:
-        throw new SyntaxError("illegal escape sequence in JSON string");
+        throw new SyntaxError(String.format(
+            "illegal escape sequence in JSON string: \\%c. "
+             + "Expected one of \\n, \\r, \\t, etc.", (char) next));
     }
   }
 
@@ -211,15 +216,17 @@ public class JsonParser implements AutoCloseable {
     if (v3 >= 0xA && v3 <= 0xF) {
       return v3;
     }
-    throw new SyntaxError("non-hexadecimal digit in unicode escape sequence");
+    throw new SyntaxError(String.format(
+        "in JSON string: non-hexadecimal digit '%c' in Unicode escape sequence.",
+        (char) next));
   }
 
   private JsonValue parseNumber() throws IOException, SyntaxError {
     StringBuilder sb = new StringBuilder();
     while (true) {
       switch (in.peek()) {
-        case -1:
-          throw new SyntaxError("EOF while parsing JSON number");
+        case EOF:
+          throw new SyntaxError("end of input while parsing JSON number.");
         case '0':
         case '1':
         case '2':
@@ -268,12 +275,14 @@ public class JsonParser implements AutoCloseable {
       skipWhitespace();
       JsonMember member = parseMember();
       if (member == null) {
-        if (object.hasMember() || in.peek() == Literal.VALUE_SEPARATOR) {
-          throw new SyntaxError("missing member in object");
+        int next = in.peek();
+        if (next != EOF // EOF is handled by caller.
+            && (next == Literal.VALUE_SEPARATOR || next != Literal.END_OBJECT)) {
+          throw new SyntaxError("missing member in object.");
         }
         break;
       }
-      object.addMember(member);
+      object.add(member);
       skipWhitespace();
     } while (skip(Literal.VALUE_SEPARATOR));
     accept(Literal.END_OBJECT);
@@ -290,7 +299,7 @@ public class JsonParser implements AutoCloseable {
 
   private void accept(char c) throws IOException, SyntaxError {
     int next = in.pop();
-    if (next == -1) {
+    if (next == EOF) {
       throw new SyntaxError(String.format("unexpected end of input (expected '%c')", c));
     }
     if (next != c) {

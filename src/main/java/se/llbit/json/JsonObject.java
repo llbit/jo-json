@@ -82,12 +82,15 @@ public class JsonObject extends JsonValue {
   }
 
   /**
-   * Add a member to the Json object.
+   * Add a member to the this JSON object.
+   *
+   * @throws NullPointerException if {@code value} is null.
    */
   public void add(String name, JsonValue value) {
-    if (value != null) {
-      addMember(new JsonMember(name, value));
+    if (value == null) {
+      throw new NullPointerException();
     }
+    add(new JsonMember(name, value));
   }
 
   public void add(String name, String value) {
@@ -169,7 +172,7 @@ public class JsonObject extends JsonValue {
    *
    * @param node The element to append to the Member list.
    */
-  public void addMember(JsonMember node) {
+  public void add(JsonMember node) {
     members.add(node);
   }
 
@@ -192,7 +195,7 @@ public class JsonObject extends JsonValue {
   }
 
   /**
-   * Builds a map associating the member names to member values.
+   * Build a map associating the member names to member values.
    */
   public Map<String, JsonValue> toMap() {
     Map<String, JsonValue> map = new HashMap<String, JsonValue>();
@@ -220,20 +223,15 @@ public class JsonObject extends JsonValue {
     return Json.UNKNOWN;
   }
 
-  public boolean hasMember(String name) {
-    for (JsonMember member : getMemberList()) {
-      if (member.getName().equals(name)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   public boolean isObject() {
     return true;
   }
 
-  public JsonObject object() {
+  @Override public JsonObject object() {
+    return this;
+  }
+
+  @Override public JsonObject asObject() {
     return this;
   }
 

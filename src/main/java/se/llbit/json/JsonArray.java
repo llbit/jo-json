@@ -62,22 +62,43 @@ public class JsonArray extends JsonValue {
     }
   }
 
+  /**
+   * Append an element to this array.
+   *
+   * @param value the value to add to the array.
+   * @throws NullPointerException if {@code value} is null.
+   */
   public void add(JsonValue value) {
+    if (value == null) {
+      throw new NullPointerException();
+    }
     elements.add(value);
   }
 
+  /**
+   * Append a JSON string to this array.
+   */
   public void add(String value) {
     elements.add(new JsonString(value));
   }
 
+  /**
+   * Append a JSON number to this array.
+   */
   public void add(long value) {
     elements.add(new JsonNumber(value));
   }
 
+  /**
+   * Append a JSON number to this array.
+   */
   public void add(double value) {
     elements.add(new JsonNumber(value));
   }
 
+  /**
+   * Append a JSON boolean to this array.
+   */
   public void add(boolean value) {
     elements.add(value ? Json.TRUE : Json.FALSE);
   }
@@ -87,7 +108,7 @@ public class JsonArray extends JsonValue {
    */
   public JsonValue get(int index) {
     if (index >= 0 && index < elements.size()) {
-      return getElement(index);
+      return elements.get(index);
     } else {
       return Json.UNKNOWN;
     }
@@ -124,26 +145,14 @@ public class JsonArray extends JsonValue {
   }
 
   /**
-   * Retrieves the number of children in the Element list.
-   *
-   * @return Number of children in the Element list.
+   * Gives the current number of elements in this array.
    */
   public int getNumElement() {
     return elements.size();
   }
 
   /**
-   * Retrieves the element at index {@code i} in the Element list.
-   *
-   * @param i Index of the element to return.
-   * @return The element at position {@code i} in the Element list.
-   */
-  public JsonValue getElement(int i) {
-    return elements.get(i);
-  }
-
-  /**
-   * Check whether the Element list has any children.
+   * Determine if this array has any elements.
    *
    * @return {@code true} if it has at least one child, {@code false} otherwise.
    */
@@ -152,28 +161,19 @@ public class JsonArray extends JsonValue {
   }
 
   /**
-   * Append an element to the Element list.
+   * Replaces the element at index {@code i} with the new value {@code value}.
    *
-   * @param node The element to append to the Element list.
+   * @param value the value to replace the old element.
+   * @param i array index of the node to be replaced.
    */
-  public void addElement(JsonValue node) {
-    elements.add(node);
-  }
-
-  /**
-   * Replaces the Element list element at index {@code i} with the new node {@code node}.
-   *
-   * @param node The new node to replace the old list element.
-   * @param i The list index of the node to be replaced.
-   */
-  public void setElement(JsonValue node, int i) {
-    elements.set(i, node);
+  public void set(int i, JsonValue value) {
+    elements.set(i, value);
   }
 
   /**
    * Retrieves the Element list.
    *
-   * @return The node representing the Element list.
+   * @return a mutable reference to the internal element list of this array.
    */
   public List<JsonValue> getElementList() {
     return elements;
@@ -183,10 +183,13 @@ public class JsonArray extends JsonValue {
     return true;
   }
 
-  public JsonArray array() {
+  @Override public JsonArray array() {
     return this;
   }
 
+  @Override public JsonArray asArray() {
+    return this;
+  }
   public boolean isEmpty() {
     return !hasElement();
   }

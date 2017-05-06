@@ -19,6 +19,8 @@ dependencies {
 	testCompile 'junit:junit:4.11'
 }
 
+test.inputs.dir file('testfiles')
+
 jacocoTestReport {
 	reports {
 		xml.enabled = true

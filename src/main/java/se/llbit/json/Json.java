@@ -31,9 +31,11 @@ package se.llbit.json;
 
 import org.jastadd.util.PrettyPrinter;
 
-public interface Json {
+public final class Json {
+  private Json() { }
+
   /** The JSON True literal. */
-  JsonLiteral TRUE = new JsonLiteral() {
+  public static final JsonLiteral TRUE = new JsonLiteral() {
     @Override public void prettyPrint(PrettyPrinter out) {
       out.print("true");
     }
@@ -56,7 +58,7 @@ public interface Json {
   };
 
   /** The JSON False literal. */
-  JsonLiteral FALSE = new JsonLiteral() {
+  public static final JsonLiteral FALSE = new JsonLiteral() {
     @Override public void prettyPrint(PrettyPrinter out) {
       out.print("false");
     }
@@ -79,7 +81,7 @@ public interface Json {
   };
 
   /** The JSON Unknown literal. */
-  JsonValue UNKNOWN = new JsonValue() {
+  public static final JsonValue UNKNOWN = new JsonValue() {
     @Override public void prettyPrint(PrettyPrinter out) {
       out.print("\"<unknown>\"");
     }
@@ -98,7 +100,7 @@ public interface Json {
   };
 
   /** The JSON Null literal. */
-  JsonLiteral NULL = new JsonLiteral() {
+  public static final JsonLiteral NULL = new JsonLiteral() {
     @Override public void prettyPrint(PrettyPrinter out) {
       out.print("null");
     }
@@ -111,4 +113,23 @@ public interface Json {
       return "null";
     }
   };
+
+  public static JsonString of(String value) {
+    if (value == null) {
+      throw new NullPointerException();
+    }
+    return new JsonString(value);
+  }
+
+  public static JsonNumber of(long value) {
+    return new JsonNumber(value);
+  }
+
+  public static JsonNumber of(double value) {
+    return new JsonNumber(value);
+  }
+
+  public static JsonValue of(boolean value) {
+    return value ? Json.TRUE : Json.FALSE;
+  }
 }

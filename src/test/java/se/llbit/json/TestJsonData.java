@@ -22,7 +22,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Parameterized.class)
 public class TestJsonData {
   private static String SYS_LINE_SEP = System.getProperty("line.separator");
-  private static final String DATA_DIR = "data";
+  private static final String DATA_DIR = "testfiles";
   private final String jsonFilename;
 
   public TestJsonData(String jsonFilename) {

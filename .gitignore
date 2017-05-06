@@ -1,5 +1,5 @@
 # Test data
-/data/*.json.out
+/testfiles/*.json.out
 
 # Build artifacts
 /*.jar

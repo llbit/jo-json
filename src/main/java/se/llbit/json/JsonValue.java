@@ -54,11 +54,31 @@ public abstract class JsonValue implements PrettyPrintable {
     return false;
   }
 
+  /**
+   * Convert this JSON value to an object.
+   */
   public JsonObject object() {
     return new JsonObject();
   }
 
+  /**
+   * Convert this JSON value to an object.
+   */
+  public JsonObject asObject() {
+    return new JsonObject();
+  }
+
+  /**
+   * Convert this JSON value to an array.
+   */
   public JsonArray array() {
+    return new JsonArray();
+  }
+
+  /**
+   * Convert this JSON value to an array.
+   */
+  public JsonArray asArray() {
     return new JsonArray();
   }
 

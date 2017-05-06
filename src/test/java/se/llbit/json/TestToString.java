@@ -31,20 +31,20 @@ public class TestToString {
 
   @Test public void testObject() {
     JsonObject obj = new JsonObject();
-    obj.addMember(new JsonMember("foo", new JsonString("bar")));
-    obj.addMember(new JsonMember("cow", new JsonNumber("4")));
+    obj.add(new JsonMember("foo", new JsonString("bar")));
+    obj.add(new JsonMember("cow", new JsonNumber("4")));
     assertEquals("{ \"foo\" : \"bar\", \"cow\" : 4 }", obj.toString());
   }
 
   @Test public void testArray() {
     JsonArray array = new JsonArray();
-    array.addElement(new JsonString("foo"));
-    array.addElement(new JsonString("bar"));
-    array.addElement(Json.TRUE);
-    array.addElement(Json.FALSE);
-    array.addElement(Json.NULL);
-    array.addElement(Json.UNKNOWN);
-    array.addElement(new JsonNumber("4"));
+    array.add(new JsonString("foo"));
+    array.add(new JsonString("bar"));
+    array.add(Json.TRUE);
+    array.add(Json.FALSE);
+    array.add(Json.NULL);
+    array.add(Json.UNKNOWN);
+    array.add(new JsonNumber("4"));
     assertEquals("[ \"foo\", \"bar\", true, false, null, \"<unknown>\", 4 ]", array.toString());
   }
 }

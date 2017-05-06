@@ -1,7 +1,5 @@
 /* Copyright (c) 2017 Jesper Öqvist <jesper@llbit.se>
  *
- * This file is part of Chunky.
- *
  * Chunky is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -115,7 +113,7 @@ public class TestJson {
   /** JsonArray.getElement() is equivalent to JsonArray.get(). */
   @Test public void testArray2() throws IOException, JsonParser.SyntaxError {
     JsonArray array = parse("[{}, [1,2,3]]").array();
-    assertSame(array.getElement(0), array.get(0));
+    assertSame(array.get(0), array.get(0));
   }
 
   /** Test the isObject() and isArray methods methods. */
@@ -131,7 +129,9 @@ public class TestJson {
   @Test public void testBool() throws IOException, JsonParser.SyntaxError {
     JsonArray array = parse("[true, false]").array();
     assertEquals(true, array.get(0).boolValue(false));
+    assertEquals(true, array.get(0).asBoolean(false));
     assertEquals(false, array.get(1).boolValue(true));
+    assertEquals(false, array.get(1).asBoolean(true));
   }
 
   /**
@@ -235,7 +235,7 @@ public class TestJson {
   /** Unclosed quote. */
   @Test public void testSyntaxError4() throws IOException, JsonParser.SyntaxError {
     thrown.expect(JsonParser.SyntaxError.class);
-    thrown.expectMessage("Syntax Error: EOF while parsing JSON string (expected '\"')");
+    thrown.expectMessage("Syntax Error: end of input while parsing JSON string (expected '\"')");
     parse("[\",2]");
   }
 
@@ -321,6 +321,20 @@ public class TestJson {
     thrown.expect(JsonParser.SyntaxError.class);
     thrown.expectMessage("Syntax Error: expected JSON object or array");
     parse(" \t\n\r   \t\n");
+  }
+
+  /** Non-string member names are not supported. */
+  @Test public void testSyntaxError17() throws IOException, JsonParser.SyntaxError {
+    thrown.expect(JsonParser.SyntaxError.class);
+    thrown.expectMessage("Syntax Error: missing member in object.");
+    parse("{ abc: true }");
+  }
+
+  /** End of input after number. */
+  @Test public void testSyntaxError18() throws IOException, JsonParser.SyntaxError {
+    thrown.expect(JsonParser.SyntaxError.class);
+    thrown.expectMessage("Syntax Error: end of input while parsing JSON number.");
+    parse("{ \"abc\": 123");
   }
 
   @Test public void testToMap() {
