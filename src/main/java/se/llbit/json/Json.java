@@ -114,6 +114,7 @@ public final class Json {
     }
   };
 
+  /** Wraps a string in a JsonString object. */
   public static JsonString of(String value) {
     if (value == null) {
       throw new NullPointerException();
@@ -121,14 +122,17 @@ public final class Json {
     return new JsonString(value);
   }
 
+  /** Wraps a number in a JsonNumber object. */
   public static JsonNumber of(long value) {
     return new JsonNumber(value);
   }
 
+  /** Wraps a number in a JsonNumber object. */
   public static JsonNumber of(double value) {
     return new JsonNumber(value);
   }
 
+  /** Wrap a boolean as a JsonValue. */
   public static JsonValue of(boolean value) {
     return value ? Json.TRUE : Json.FALSE;
   }
