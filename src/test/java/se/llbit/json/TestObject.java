@@ -124,4 +124,30 @@ public class TestObject {
     object.add("y", 1);
     object.getMember(-1);
   }
+
+  @Test public void testRemoveMember() {
+    JsonObject object = new JsonObject();
+    object.add("x", "!");
+    object.add("y", 1);
+    object.add("z", false);
+
+    assertEquals(3, object.size());
+    assertEquals("y", object.getMember(1).name);
+
+    object.removeMember(1);
+    assertEquals(2, object.size());
+    assertEquals("z", object.getMember(1).name);
+  }
+
+  @Test(expected = IndexOutOfBoundsException.class)
+  public void testRemoveMemberErr1() {
+    JsonObject object = new JsonObject();
+    object.removeMember(1);
+  }
+
+  @Test(expected = IndexOutOfBoundsException.class)
+  public void testRemoveMemberErr2() {
+    JsonObject object = new JsonObject();
+    object.removeMember(-2);
+  }
 }

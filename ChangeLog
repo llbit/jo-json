@@ -14,6 +14,7 @@
 				* Removed JsonObject.getMembers().
 				* Removed JsonObject.getMemberList().
 				* Renamed JsonObject.getNumMember() to size().
+				* Added JsonObject.removeMember(int).
 				* Added Json.of(X) methods to convert primitive types and String to the
           wrapped JSON equivalents.
         * Added asInt(int), asLong(long), asFloat(float), asDouble(double),

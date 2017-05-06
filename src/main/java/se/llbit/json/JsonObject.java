@@ -155,6 +155,16 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
   }
 
   /**
+   * Remove the member at index {@code i}. The following elements are shifted
+   * forward.
+   *
+   * @param i index of the member to delete.
+   * @throws IndexOutOfBoundsException if the given index is not valid.
+   */
+  public JsonMember removeMember(int i) {
+    return members.remove(i);
+  }
+  /**
    * Append an element to the Member list.
    *
    * @param node The element to append to the Member list.
