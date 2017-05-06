@@ -30,10 +30,6 @@ jacocoTestReport {
 
 check.dependsOn jacocoTestReport
 
-javadoc {
-  options.addStringOption('Xdoclint:none', '-quiet')
-}
-
 task javadocJar(type: Jar) {
   classifier = 'javadoc'
   from javadoc
