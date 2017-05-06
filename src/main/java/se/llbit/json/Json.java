@@ -29,6 +29,10 @@
  */
 package se.llbit.json;
 
+/**
+ * Provides constant JSON literals (true, false, null, unknown),
+ * and helper functions to construct JSON literals from Java primitives.
+ */
 public final class Json {
   private Json() { }
 

@@ -41,7 +41,7 @@ import java.util.Map;
  * <p>Members are stored in a list.
  */
 public class JsonObject extends JsonValue implements Iterable<JsonMember> {
-  private final List<JsonMember> members = new ArrayList<JsonMember>();
+  private final List<JsonMember> members = new ArrayList<>();
 
   public void prettyPrint(PrettyPrinter out) {
     if (!isEmpty()) {
@@ -167,7 +167,7 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
    * Build a map associating the member names to member values.
    */
   public Map<String, JsonValue> toMap() {
-    Map<String, JsonValue> map = new HashMap<String, JsonValue>();
+    Map<String, JsonValue> map = new HashMap<>();
     for (JsonMember member : members) {
       if (!map.containsKey(member.getName())) {
         // Only the first occurrence of a member is mapped.
