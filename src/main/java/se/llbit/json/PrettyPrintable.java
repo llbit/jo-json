@@ -29,6 +29,9 @@
  */
 package se.llbit.json;
 
+/**
+ * Marker interface for objects that can be pretty-printed.
+ */
 public interface PrettyPrintable {
   void prettyPrint(PrettyPrinter prettyPrinter);
 }
