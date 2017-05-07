@@ -1,6 +1,7 @@
 Simple Java JSON Library
 ========================
 
+[![Javadocs](http://javadoc.io/badge/se.llbit/jo-json.svg)](http://javadoc.io/doc/se.llbit/jo-json)
 [![Build Status](https://travis-ci.org/llbit/jo-json.svg?branch=master)](https://travis-ci.org/llbit/jo-json)
 [![codecov](https://codecov.io/gh/llbit/jo-json/branch/master/graph/badge.svg)](https://codecov.io/gh/llbit/jo-json)
 
