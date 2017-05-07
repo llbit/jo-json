@@ -113,7 +113,7 @@ public class PrettyPrinter implements AutoCloseable {
     }
   }
 
-  @Override public void close() throws Exception {
+  @Override public void close() {
     out.close();
   }
 }
