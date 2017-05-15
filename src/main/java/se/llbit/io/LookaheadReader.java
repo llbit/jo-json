@@ -65,9 +65,9 @@ public class LookaheadReader extends FilterReader {
 
   @Override public long skip(long num) throws IOException {
     refill();
-    long actual = Math.min(num, length - pos);
-    pos += actual;
-    return actual;
+    long skipped = Math.min(num, length - pos);
+    pos += skipped;
+    return skipped;
   }
 
   /**
