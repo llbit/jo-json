@@ -223,6 +223,8 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
 
   /**
    * Build a map associating the member names to member values.
+   *
+   * <p>The resulting map is a fresh modifiable map.
    */
   public Map<String, JsonValue> toMap() {
     Map<String, JsonValue> map = new HashMap<>();

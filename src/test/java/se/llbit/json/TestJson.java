@@ -350,7 +350,7 @@ public class TestJson {
     parse("{ ,");
   }
 
-  @Test public void testToMap() {
+  @Test public void testToMap1() {
     JsonArray array = new JsonArray();
     array.add("!");
     array.add(711);
@@ -366,5 +366,29 @@ public class TestJson {
     assertEquals("''''", map.get("@").stringValue(""));
     assertEquals("\n\r", map.get("\"\"").stringValue(""));
     assertSame(array, map.get("."));
+  }
+
+  /** Test that the map can be modified. */
+  @Test public void testToMap2() {
+    JsonObject object = new JsonObject();
+    object.add("Hunrath", 1);
+    object.add("Kaptar", 2);
+
+    Map<String, JsonValue> map = object.toMap();
+    assertEquals(2, map.size());
+
+    // Modify the map.
+    map.put("Soria", Json.of(4));
+    assertEquals(3, map.size());
+  }
+
+  /** Test that an empty map can be modified. */
+  @Test public void testToMap3() {
+    Map<String, JsonValue> map = new JsonObject().toMap();
+    assertEquals(0, map.size());
+
+    // Modify the map.
+    map.put("Maray", Json.of(3));
+    assertEquals(1, map.size());
   }
 }
