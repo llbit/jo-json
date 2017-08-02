@@ -281,4 +281,33 @@ public class JsonObject extends JsonValue implements Iterable<JsonMember> {
   @Override public Iterator<JsonMember> iterator() {
     return members.iterator();
   }
+
+  @Override public int hashCode() {
+    // XOR all member hash codes.
+    int hash = 0;
+    for (JsonMember member : members) {
+      hash ^= member.hashCode();
+    }
+    return hash;
+  }
+
+  /**
+   * @return {@code true} if the argument object is a JsonObject with
+   * equal members in the same order as this object.
+   */
+  @Override public boolean equals(Object obj) {
+    if (!(obj instanceof JsonObject)) {
+      return false;
+    }
+    JsonObject other = (JsonObject) obj;
+    if (size() != other.size()) {
+      return false;
+    }
+    for (int i = 0; i < size(); ++i) {
+      if (!get(i).equals(other.get(i))) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

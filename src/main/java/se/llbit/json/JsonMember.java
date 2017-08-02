@@ -66,4 +66,21 @@ public class JsonMember implements PrettyPrintable {
   public JsonMember copy() {
     return new JsonMember(name, value.copy());
   }
+
+  @Override public int hashCode() {
+    return name.hashCode() ^ value.hashCode();
+  }
+
+  /**
+   * @return {@code true} if the argument object is a JsonMember with
+   * equal name and value to this member.
+   */
+  @Override public boolean equals(Object obj) {
+    if (!(obj instanceof JsonMember)) {
+      return false;
+    }
+    JsonMember other = (JsonMember) obj;
+    return (name == other.name || name.equals(other.name))
+        && (value == other.value || value.equals(other.value));
+  }
 }

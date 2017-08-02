@@ -128,4 +128,20 @@ public class JsonString extends JsonValue {
     }
     return sb.toString();
   }
+
+  @Override public int hashCode() {
+    return value.hashCode();
+  }
+
+  /**
+   * @return {@code true} if the argument object is a JsonString with
+   * equal value as this string.
+   */
+  @Override public boolean equals(Object obj) {
+    if (!(obj instanceof JsonString)) {
+      return false;
+    }
+    JsonString other = (JsonString) obj;
+    return value == other.value || value.equals(other.value);
+  }
 }

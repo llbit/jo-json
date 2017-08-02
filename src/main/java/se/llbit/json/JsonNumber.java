@@ -92,4 +92,20 @@ public class JsonNumber extends JsonValue {
   @Override public JsonNumber copy() {
     return this;
   }
+
+  @Override public int hashCode() {
+    return value.hashCode();
+  }
+
+  /**
+   * @return {@code true} if the argument object is a JsonNumber with
+   * equal value string as this number.
+   */
+  @Override public boolean equals(Object obj) {
+    if (!(obj instanceof JsonNumber)) {
+      return false;
+    }
+    JsonNumber other = (JsonNumber) obj;
+    return value == other.value || value.equals(other.value);
+  }
 }

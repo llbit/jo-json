@@ -215,4 +215,33 @@ public class JsonArray extends JsonValue implements Iterable<JsonValue> {
   @Override public Iterator<JsonValue> iterator() {
     return elements.iterator();
   }
+
+  @Override public int hashCode() {
+    // XOR all element hash codes.
+    int hash = 0;
+    for (JsonValue element : elements) {
+      hash ^= element.hashCode();
+    }
+    return hash;
+  }
+
+  /**
+   * @return {@code true} if the argument object is a JsonArray with
+   * equal elements in the same order as this array.
+   */
+  @Override public boolean equals(Object obj) {
+    if (!(obj instanceof JsonArray)) {
+      return false;
+    }
+    JsonArray other = (JsonArray) obj;
+    if (size() != other.size()) {
+      return false;
+    }
+    for (int i = 0; i < size(); ++i) {
+      if (!get(i).equals(other.get(i))) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
