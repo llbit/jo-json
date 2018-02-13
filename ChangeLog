@@ -1,3 +1,6 @@
+LATEST
+    * Shortened JsonMember.toString() output (removed space before colon).
+
 1.3.1 - 2017-08-02
     * Implemented hashCode() and equals() in Json objects.
 

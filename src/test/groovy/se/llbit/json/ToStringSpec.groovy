@@ -1,4 +1,4 @@
-/* Copyright (c) 2013-2017, Jesper Öqvist
+/* Copyright (c) 2013-2018, Jesper Öqvist
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -27,53 +27,63 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package se.llbit.json;
+package se.llbit.json
 
-import org.junit.Test;
+import spock.lang.*
 
-import static org.junit.Assert.assertEquals;
+class ToStringSpec extends Specification {
 
-public class TestToString {
-
-  @Test public void testNumber() {
-    assertEquals("123", new JsonNumber("123").toString());
+  def "Number"() {
+    expect:
+    new JsonNumber("123").toString() == "123"
   }
 
-  @Test public void testString() {
-    assertEquals("\"eat more carrots\"", new JsonString("eat more carrots").toString());
+  def "String"() {
+    expect:
+    new JsonString("eat more carrots").toString() == '"eat more carrots"'
   }
 
-  @Test public void testTrue() {
-    assertEquals("true", Json.TRUE.toString());
+  def "True"() {
+    expect:
+    Json.TRUE.toString() == "true"
   }
 
-  @Test public void testFalse() {
-    assertEquals("false", Json.FALSE.toString());
-  }
-  @Test public void testMember() {
-    assertEquals("\"foo\" : \"bar\"", new JsonMember("foo", new JsonString("bar")).toString());
+  def "False"() {
+    expect:
+    Json.FALSE.toString() == "false"
   }
 
-  @Test public void testNull() {
-    assertEquals("null", Json.NULL.toString());
+  def "Member"() {
+    new JsonMember("foo", new JsonString("bar")).toString() == '"foo": "bar"'
   }
 
-  @Test public void testObject() {
-    JsonObject obj = new JsonObject();
-    obj.add(new JsonMember("foo", new JsonString("bar")));
-    obj.add(new JsonMember("cow", new JsonNumber("4")));
-    assertEquals("{ \"foo\" : \"bar\", \"cow\" : 4 }", obj.toString());
+  def "Null"() {
+    expect:
+    Json.NULL.toString() == "null"
   }
 
-  @Test public void testArray() {
-    JsonArray array = new JsonArray();
-    array.add(new JsonString("foo"));
-    array.add(new JsonString("bar"));
-    array.add(Json.TRUE);
-    array.add(Json.FALSE);
-    array.add(Json.NULL);
-    array.add(Json.UNKNOWN);
-    array.add(new JsonNumber("4"));
-    assertEquals("[ \"foo\", \"bar\", true, false, null, \"<unknown>\", 4 ]", array.toString());
+  def "Object"() {
+    when:
+    def obj = new JsonObject()
+    obj.add(new JsonMember("foo", new JsonString("bar")))
+    obj.add(new JsonMember("cow", new JsonNumber("4")))
+
+    then:
+    obj.toString() == '{ "foo": "bar", "cow": 4 }'
+  }
+
+  def "Array"() {
+    when:
+    def array = new JsonArray()
+    array.add(new JsonString("foo"))
+    array.add(new JsonString("bar"))
+    array.add(Json.TRUE)
+    array.add(Json.FALSE)
+    array.add(Json.NULL)
+    array.add(Json.UNKNOWN)
+    array.add(new JsonNumber("4"))
+
+    then:
+    array.toString() == '[ "foo", "bar", true, false, null, "<unknown>", 4 ]'
   }
 }

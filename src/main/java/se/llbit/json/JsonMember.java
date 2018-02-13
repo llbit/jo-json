@@ -51,7 +51,7 @@ public class JsonMember implements PrettyPrintable {
   }
 
   @Override public String toString() {
-    return "\"" + getName() + "\" : " + getValue().toString();
+    return "\"" + getName() + "\": " + getValue().toString();
   }
 
   public String getName() {
