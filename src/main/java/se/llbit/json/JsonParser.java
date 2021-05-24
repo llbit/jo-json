@@ -62,6 +62,13 @@ public class JsonParser implements AutoCloseable {
   }
 
   private final LookaheadReader in;
+  private final Tolerance tolerance;
+
+  /** Tolerance to deviation from JSON standard. */
+  public enum Tolerance {
+    STRICT,
+    LENIENT,
+  }
 
   /**
    * Parse the JSON object from the given input.
@@ -69,7 +76,17 @@ public class JsonParser implements AutoCloseable {
    * <p>The input stream is not closed after being used.
    */
   public JsonParser(InputStream input) {
-    in = new LookaheadReader(input, 8);
+    this(input, Tolerance.LENIENT);
+  }
+
+  /**
+   * Parse the JSON object from the given input with the given tolerance to deviations from JSON standard.
+   *
+   * <p>The input stream is not closed after being used.
+   */
+  public JsonParser(InputStream input, Tolerance tolerance) {
+    this.in = new LookaheadReader(input, 8);
+    this.tolerance = tolerance;
   }
 
   /**
@@ -309,7 +326,8 @@ public class JsonParser implements AutoCloseable {
   }
 
   private JsonMember parseMember() throws IOException, SyntaxError {
-    if (in.peek() == Literal.QUOTE_MARK || isValidInKey((char) in.peek())) {
+    if (in.peek() == Literal.QUOTE_MARK
+            || (tolerance == Tolerance.LENIENT && isValidBeginningOfKey((char) in.peek()))) {
       String name = parseObjectKey();
       skipWhitespace();
       accept(Literal.NAME_SEPARATOR);
@@ -326,7 +344,7 @@ public class JsonParser implements AutoCloseable {
   private String parseObjectKey() throws IOException, SyntaxError {
     if (in.peek() == Literal.QUOTE_MARK) {
       return parseString();
-    } else if (isValidInKey((char) in.peek())) {
+    } else if (tolerance == Tolerance.LENIENT && isValidBeginningOfKey((char) in.peek())) {
       StringBuilder sb = new StringBuilder();
       while (true) {
         int next = in.peek();
@@ -351,8 +369,12 @@ public class JsonParser implements AutoCloseable {
     }
   }
 
-  private boolean isValidInKey(char c) {
+  private static boolean isValidBeginningOfKey(char c) {
     return Character.isAlphabetic(c);
+  }
+
+  private static boolean isValidInKey(char c) {
+    return Character.isAlphabetic(c) || Character.isDigit(c);
   }
 
   @Override public void close() throws IOException {
