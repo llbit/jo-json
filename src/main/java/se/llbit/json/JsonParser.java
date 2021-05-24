@@ -370,11 +370,11 @@ public class JsonParser implements AutoCloseable {
   }
 
   private static boolean isValidBeginningOfKey(char c) {
-    return Character.isAlphabetic(c);
+    return Character.isAlphabetic(c) || c == '$' || c == '_';
   }
 
   private static boolean isValidInKey(char c) {
-    return Character.isAlphabetic(c) || Character.isDigit(c);
+    return !Character.isWhitespace(c) &&  c != '"' && c != ':';
   }
 
   @Override public void close() throws IOException {
