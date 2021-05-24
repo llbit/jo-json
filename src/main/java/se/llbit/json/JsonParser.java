@@ -62,6 +62,13 @@ public class JsonParser implements AutoCloseable {
   }
 
   private final LookaheadReader in;
+  private final Tolerance tolerance;
+
+  /** Tolerance to deviation from JSON standard. */
+  public enum Tolerance {
+    STRICT,
+    LENIENT,
+  }
 
   /**
    * Parse the JSON object from the given input.
@@ -69,7 +76,17 @@ public class JsonParser implements AutoCloseable {
    * <p>The input stream is not closed after being used.
    */
   public JsonParser(InputStream input) {
-    in = new LookaheadReader(input, 8);
+    this(input, Tolerance.LENIENT);
+  }
+
+  /**
+   * Parse the JSON object from the given input with the given tolerance to deviations from JSON standard.
+   *
+   * <p>The input stream is not closed after being used.
+   */
+  public JsonParser(InputStream input, Tolerance tolerance) {
+    this.in = new LookaheadReader(input, 8);
+    this.tolerance = tolerance;
   }
 
   /**
@@ -309,8 +326,9 @@ public class JsonParser implements AutoCloseable {
   }
 
   private JsonMember parseMember() throws IOException, SyntaxError {
-    if (in.peek() == Literal.QUOTE_MARK) {
-      String name = parseString();
+    if (in.peek() == Literal.QUOTE_MARK
+            || (tolerance == Tolerance.LENIENT && isValidBeginningOfKey((char) in.peek()))) {
+      String name = parseObjectKey();
       skipWhitespace();
       accept(Literal.NAME_SEPARATOR);
       skipWhitespace();
@@ -321,6 +339,42 @@ public class JsonParser implements AutoCloseable {
       return new JsonMember(name, value);
     }
     return null;
+  }
+
+  private String parseObjectKey() throws IOException, SyntaxError {
+    if (in.peek() == Literal.QUOTE_MARK) {
+      return parseString();
+    } else if (tolerance == Tolerance.LENIENT && isValidBeginningOfKey((char) in.peek())) {
+      StringBuilder sb = new StringBuilder();
+      while (true) {
+        int next = in.peek();
+        if (next == EOF) {
+          String result = sb.toString();
+          if (result.isEmpty()) {
+            throw new SyntaxError("unexpected end of input");
+          }
+          return result;
+        } else if (!isValidInKey((char) next)) {
+          String result = sb.toString();
+          if (result.isEmpty()) {
+            throw new SyntaxError(String.format("unexpected character '%c'", (char) next));
+          }
+          return result;
+        }
+        sb.append((char) next);
+        in.pop();
+      }
+    } else {
+      throw new SyntaxError(String.format("unexpected character '%c'", (char) in.peek()));
+    }
+  }
+
+  private static boolean isValidBeginningOfKey(char c) {
+    return Character.isAlphabetic(c) || c == '$' || c == '_';
+  }
+
+  private static boolean isValidInKey(char c) {
+    return !Character.isWhitespace(c) &&  c != '"' && c != ':';
   }
 
   @Override public void close() throws IOException {

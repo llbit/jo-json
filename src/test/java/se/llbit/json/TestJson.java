@@ -60,6 +60,16 @@ public class TestJson {
     }
   }
 
+  private static JsonValue parse_strict(String json) throws IOException, JsonParser.SyntaxError {
+    InputStream input = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
+    JsonParser parser = new JsonParser(input, JsonParser.Tolerance.STRICT);
+    try {
+      return parser.parse();
+    } finally {
+      parser.close();
+    }
+  }
+
   /** Possible to parse empty objects. */
   @Test public void testEmptyObject() throws IOException, JsonParser.SyntaxError {
     assertEquals(0, parse("{}").object().size());
@@ -217,6 +227,12 @@ public class TestJson {
     assertEquals(3, parse("{\"x\"   \n\r\t   :3}").object().get("x").intValue(0));
   }
 
+  /** Object keys can be missing quotes */
+  @Test public void testMissingQuotes() throws JsonParser.SyntaxError, IOException {
+    JsonObject object = parse("{abc:\"foo\"}").object();
+    assertEquals("foo", object.get("abc").stringValue(""));
+  }
+
   /** Trailing comma in array. */
   @Test public void testSyntaxError1() throws IOException, JsonParser.SyntaxError {
     thrown.expect(JsonParser.SyntaxError.class);
@@ -333,7 +349,7 @@ public class TestJson {
   @Test public void testSyntaxError17() throws IOException, JsonParser.SyntaxError {
     thrown.expect(JsonParser.SyntaxError.class);
     thrown.expectMessage("Syntax Error: missing member in object.");
-    parse("{ abc: true }");
+    parse("{ 12: true }");
   }
 
   /** End of input after number. */
@@ -348,6 +364,13 @@ public class TestJson {
     thrown.expect(JsonParser.SyntaxError.class);
     thrown.expectMessage("Syntax Error: missing member in object.");
     parse("{ ,");
+  }
+
+  /** Missing quotes around object key in strict parsing mode. */
+  @Test public void testSyntaxError20() throws IOException, JsonParser.SyntaxError {
+    thrown.expect(JsonParser.SyntaxError.class);
+    thrown.expectMessage("Syntax Error: missing member in object.");
+    parse_strict("{foo:\"abc\"}");
   }
 
   @Test public void testToMap1() {
