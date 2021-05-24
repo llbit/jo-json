@@ -217,6 +217,12 @@ public class TestJson {
     assertEquals(3, parse("{\"x\"   \n\r\t   :3}").object().get("x").intValue(0));
   }
 
+  /** Object keys can be missing quotes */
+  @Test public void testMissingQuotes() throws JsonParser.SyntaxError, IOException {
+    JsonObject object = parse("{abc:\"foo\"}").object();
+    assertEquals("foo", object.get("abc").stringValue(""));
+  }
+
   /** Trailing comma in array. */
   @Test public void testSyntaxError1() throws IOException, JsonParser.SyntaxError {
     thrown.expect(JsonParser.SyntaxError.class);
@@ -333,7 +339,7 @@ public class TestJson {
   @Test public void testSyntaxError17() throws IOException, JsonParser.SyntaxError {
     thrown.expect(JsonParser.SyntaxError.class);
     thrown.expectMessage("Syntax Error: missing member in object.");
-    parse("{ abc: true }");
+    parse("{ 12: true }");
   }
 
   /** End of input after number. */

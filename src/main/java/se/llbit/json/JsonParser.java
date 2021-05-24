@@ -309,8 +309,8 @@ public class JsonParser implements AutoCloseable {
   }
 
   private JsonMember parseMember() throws IOException, SyntaxError {
-    if (in.peek() == Literal.QUOTE_MARK) {
-      String name = parseString();
+    if (in.peek() == Literal.QUOTE_MARK || isValidInKey((char) in.peek())) {
+      String name = parseObjectKey();
       skipWhitespace();
       accept(Literal.NAME_SEPARATOR);
       skipWhitespace();
@@ -321,6 +321,38 @@ public class JsonParser implements AutoCloseable {
       return new JsonMember(name, value);
     }
     return null;
+  }
+
+  private String parseObjectKey() throws IOException, SyntaxError {
+    if (in.peek() == Literal.QUOTE_MARK) {
+      return parseString();
+    } else if (isValidInKey((char) in.peek())) {
+      StringBuilder sb = new StringBuilder();
+      while (true) {
+        int next = in.peek();
+        if (next == EOF) {
+          String result = sb.toString();
+          if (result.isEmpty()) {
+            throw new SyntaxError("unexpected end of input");
+          }
+          return result;
+        } else if (!isValidInKey((char) next)) {
+          String result = sb.toString();
+          if (result.isEmpty()) {
+            throw new SyntaxError(String.format("unexpected character '%c'", (char) next));
+          }
+          return result;
+        }
+        sb.append((char) next);
+        in.pop();
+      }
+    } else {
+      throw new SyntaxError(String.format("unexpected character '%c'", (char) in.peek()));
+    }
+  }
+
+  private boolean isValidInKey(char c) {
+    return Character.isAlphabetic(c);
   }
 
   @Override public void close() throws IOException {
